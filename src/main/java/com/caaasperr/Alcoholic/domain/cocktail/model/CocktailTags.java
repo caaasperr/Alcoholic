@@ -4,11 +4,13 @@ import com.caaasperr.Alcoholic.domain.tag.model.Tag;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "cocktail_tags")
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CocktailTags {

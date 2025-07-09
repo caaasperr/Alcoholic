@@ -1,5 +1,6 @@
 package com.caaasperr.Alcoholic.domain.cocktail.controller;
 
+import com.caaasperr.Alcoholic.domain.cocktail.dto.AddCocktailTagsRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailIngredientsRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailResponse;
@@ -45,5 +46,12 @@ public interface CocktailApi {
     ResponseEntity<Void> addIngredient(
             @PathVariable Long id,
             @RequestBody CreateCocktailIngredientsRequest request
+    );
+
+    @ApiResponse(responseCode = "201")
+    @Operation(summary = "칵테일 태그 추가")
+    ResponseEntity<Void> addTags(
+            @PathVariable Long id,
+            @RequestBody AddCocktailTagsRequest request
     );
 }

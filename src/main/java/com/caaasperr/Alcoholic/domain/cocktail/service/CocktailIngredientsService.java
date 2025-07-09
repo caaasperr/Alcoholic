@@ -40,5 +40,4 @@ public class CocktailIngredientsService {
                 .map(CocktailIngredient::from)
                 .collect(Collectors.toList());
     }
-
 }
