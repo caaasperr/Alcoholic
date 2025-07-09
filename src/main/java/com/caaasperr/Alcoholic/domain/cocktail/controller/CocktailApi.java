@@ -1,5 +1,6 @@
 package com.caaasperr.Alcoholic.domain.cocktail.controller;
 
+import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailIngredientsRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,5 +38,12 @@ public interface CocktailApi {
     @Operation(summary = "칵테일 삭제")
     ResponseEntity<Void> deleteCocktail(
             @PathVariable Long id
+    );
+
+    @ApiResponse(responseCode = "201")
+    @Operation(summary = "칵테일 레시피 재료 추가")
+    ResponseEntity<Void> addIngredient(
+            @PathVariable Long id,
+            @RequestBody CreateCocktailIngredientsRequest request
     );
 }

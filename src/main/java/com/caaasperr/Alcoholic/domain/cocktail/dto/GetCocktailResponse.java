@@ -12,18 +12,20 @@ public record GetCocktailResponse(
         String name,
         String description,
         String cover_image,
+        List<CocktailIngredient> ingredients,
         List<Step> steps,
         Float vol,
         Long view,
         LocalDateTime created_at
 ) {
-    public static GetCocktailResponse of(Cocktail cocktail, List<Step> steps) {
+    public static GetCocktailResponse of(Cocktail cocktail, List<Step> steps, List<CocktailIngredient> ingredients) {
         return new GetCocktailResponse(
                 cocktail.getId(),
                 cocktail.getUser().getUsername(),
                 cocktail.getName(),
                 cocktail.getDescription(),
                 cocktail.getCover_image(),
+                ingredients,
                 steps, cocktail.getVol(),
                 cocktail.getView(),
                 cocktail.getCreated_at()

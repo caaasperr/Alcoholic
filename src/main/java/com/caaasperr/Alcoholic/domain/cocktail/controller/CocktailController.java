@@ -1,7 +1,9 @@
 package com.caaasperr.Alcoholic.domain.cocktail.controller;
 
+import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailIngredientsRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailResponse;
+import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailIngredientsService;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailService;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
 import org.springframework.http.HttpStatus;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class CocktailController implements CocktailApi{
     private final CocktailService cocktailService;
     private final StepService stepService;
+    private final CocktailIngredientsService cocktailIngredientsService;
 
-    public CocktailController(CocktailService cocktailService, StepService stepService) {
+    public CocktailController(CocktailService cocktailService, StepService stepService, CocktailIngredientsService cocktailIngredientsService) {
         this.cocktailService = cocktailService;
         this.stepService = stepService;
+        this.cocktailIngredientsService = cocktailIngredientsService;
     }
 
     @PostMapping
@@ -32,7 +36,7 @@ public class CocktailController implements CocktailApi{
     public ResponseEntity<GetCocktailResponse> getCocktail(
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(GetCocktailResponse.of(cocktailService.getCocktail(id), stepService.getStepsByCocktailID(id)));
+        return ResponseEntity.ok(GetCocktailResponse.of(cocktailService.getCocktail(id), stepService.getStepsByCocktailID(id), cocktailIngredientsService.getCocktailIngredients(id)));
     }
 
     @DeleteMapping("/{id}")
@@ -40,6 +44,17 @@ public class CocktailController implements CocktailApi{
             @PathVariable Long id
     ) {
         cocktailService.deleteCocktail(id);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/{id}/ingredients")
+    public ResponseEntity<Void> addIngredient(
+            @PathVariable Long id,
+            @RequestBody CreateCocktailIngredientsRequest request
+    ) {
+        cocktailIngredientsService.createCocktailIngredients(id, request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
