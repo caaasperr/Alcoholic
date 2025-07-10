@@ -1,5 +1,6 @@
 package com.caaasperr.Alcoholic.domain.cocktail.model;
 
+import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.user.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -36,6 +38,15 @@ public class Cocktail {
     @Size(max = 255)
     @NotNull
     private String cover_image;
+
+    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY)
+    private List<CocktailIngredients> ingredients;
+
+    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY)
+    private List<CocktailTags> tags;
+
+    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY)
+    private List<Step> steps;
 
     private Float vol;
     private Long view;

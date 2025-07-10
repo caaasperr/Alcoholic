@@ -1,9 +1,6 @@
 package com.caaasperr.Alcoholic.domain.cocktail.controller;
 
-import com.caaasperr.Alcoholic.domain.cocktail.dto.AddCocktailTagsRequest;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailIngredientsRequest;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailRequest;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailResponse;
+import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailIngredientsService;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailService;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailTagsService;
@@ -36,11 +33,19 @@ public class CocktailController implements CocktailApi{
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping
+    public ResponseEntity<GetCocktailsResponse> getCocktails(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
+    ) {
+        return ResponseEntity.ok(cocktailService.getCocktails(page, size));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<GetCocktailResponse> getCocktail(
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(GetCocktailResponse.of(cocktailService.getCocktail(id), stepService.getStepsByCocktailID(id), cocktailIngredientsService.getCocktailIngredients(id), cocktailTagsService.getCocktailTags(id)));
+        return ResponseEntity.ok(GetCocktailResponse.of(cocktailService.getCocktail(id)));
     }
 
     @DeleteMapping("/{id}")
