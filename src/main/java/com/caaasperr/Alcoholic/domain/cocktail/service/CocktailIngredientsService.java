@@ -2,6 +2,7 @@ package com.caaasperr.Alcoholic.domain.cocktail.service;
 
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
+import com.caaasperr.Alcoholic.domain.cocktail.dto.AddCocktailIngredientsRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CocktailIngredient;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailIngredientsRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
@@ -27,10 +28,19 @@ public class CocktailIngredientsService {
         this.ingredientRepository = ingredientRepository;
     }
 
-    public void createCocktailIngredients(Long cocktail_id, CreateCocktailIngredientsRequest request) {
+    public void addCocktailIngredients(Long cocktail_id, AddCocktailIngredientsRequest request) {
         Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
-        Ingredient ingredient = ingredientRepository.findById(request.ingredient_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INGREDIENT));
-        cocktailIngredientsRepository.save(request.toCocktailIngredients(cocktail, ingredient));
+
+        for (CreateCocktailIngredientsRequest ingredientsRequest : request.ingredients()) {
+            Ingredient ingredient = ingredientRepository.findById(ingredientsRequest.ingredient_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INGREDIENT));
+
+            cocktailIngredientsRepository.save(CocktailIngredients.builder()
+                    .cocktail(cocktail)
+                    .ingredient(ingredient)
+                    .amount(ingredientsRequest.amount())
+                    .build()
+            );
+        }
     }
 
     public List<CocktailIngredient> getCocktailIngredients(Long cocktailId) {

@@ -53,9 +53,9 @@ public interface CocktailApi {
 
     @ApiResponse(responseCode = "201")
     @Operation(summary = "칵테일 레시피 재료 추가")
-    ResponseEntity<Void> addIngredient(
+    ResponseEntity<Void> addIngredients(
             @PathVariable Long id,
-            @RequestBody CreateCocktailIngredientsRequest request
+            @RequestBody AddCocktailIngredientsRequest request
     );
 
     @ApiResponse(responseCode = "201")

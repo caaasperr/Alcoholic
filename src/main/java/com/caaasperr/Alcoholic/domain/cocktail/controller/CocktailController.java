@@ -58,11 +58,11 @@ public class CocktailController implements CocktailApi{
     }
 
     @PostMapping("/{id}/ingredients")
-    public ResponseEntity<Void> addIngredient(
+    public ResponseEntity<Void> addIngredients(
             @PathVariable Long id,
-            @RequestBody CreateCocktailIngredientsRequest request
+            @RequestBody AddCocktailIngredientsRequest request
     ) {
-        cocktailIngredientsService.createCocktailIngredients(id, request);
+        cocktailIngredientsService.addCocktailIngredients(id, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
