@@ -1,8 +1,10 @@
 package com.caaasperr.Alcoholic.domain.ingredient.service;
 
+import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
+import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.repository.IngredientRepository;
 import com.caaasperr.Alcoholic.domain.maker.repository.MakerRepository;
@@ -10,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class IngredientService {
@@ -26,10 +30,13 @@ public class IngredientService {
         ingredientRepository.save(ingredient);
     }
 
-    public Page<Ingredient> getIngredients(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public GetIngredientsResponse getIngredients(Integer page, Integer size) {
+        long total = ingredientRepository.count();
+        Criteria criteria = Criteria.of(page, size);
+        PageRequest pageRequest = PageRequest.of(criteria.getPage(), criteria.getSize());
+        Page<Ingredient> ingredientPage = ingredientRepository.findAll(pageRequest);
 
-        return ingredientRepository.findAll(pageable);
+        return GetIngredientsResponse.of(ingredientPage, criteria);
     }
 
     public void deleteIngredient(Long id) {

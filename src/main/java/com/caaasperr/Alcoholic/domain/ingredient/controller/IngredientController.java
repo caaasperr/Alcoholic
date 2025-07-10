@@ -1,6 +1,7 @@
 package com.caaasperr.Alcoholic.domain.ingredient.controller;
 
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
+import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.service.IngredientService;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public class IngredientController implements IngredientApi {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Ingredient>> getIngredients(
+    public ResponseEntity<GetIngredientsResponse> getIngredients(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {

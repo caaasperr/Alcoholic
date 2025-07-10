@@ -21,7 +21,7 @@ public class Ingredient {
     private Long id;
 
     private String name;
-    private BigDecimal vol;
+    private Float vol;
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
