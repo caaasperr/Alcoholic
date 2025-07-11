@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -33,6 +34,8 @@ public record CreateCocktailRequest(
                 .name(name)
                 .description(description)
                 .cover_image(cover_image)
+                .view(0L)
+                .created_at(LocalDateTime.now())
                 .vol(vol).build();
     }
 }

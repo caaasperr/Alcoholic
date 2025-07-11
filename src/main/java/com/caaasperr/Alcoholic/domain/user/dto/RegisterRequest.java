@@ -4,6 +4,8 @@ import com.caaasperr.Alcoholic.domain.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
+
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 public record RegisterRequest(
@@ -20,6 +22,11 @@ public record RegisterRequest(
         String password
 ) {
     public User toUser() {
-        return User.builder().email(email).username(username).password(password).build();
+        return User.builder()
+                .email(email)
+                .username(username)
+                .password(password)
+                .createdAt(LocalDateTime.now())
+                .build();
     }
 }

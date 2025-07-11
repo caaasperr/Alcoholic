@@ -6,6 +6,8 @@ import com.caaasperr.Alcoholic.domain.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
+
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 public record CreateCommentRequest(
@@ -26,6 +28,7 @@ public record CreateCommentRequest(
                 .cocktail(cocktail)
                 .user(user)
                 .content(content)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 }
