@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Tag(name = "Cocktail", description = "Cocktail API")
 public interface CocktailApi {
     @ApiResponse(responseCode = "201")
@@ -26,6 +28,9 @@ public interface CocktailApi {
     )
     @Operation(summary = "칵테일 모두 조회")
     ResponseEntity<GetCocktailsResponse> getCocktails(
+            @RequestParam(required = false) List<String> tags,
+            @RequestParam(required = false) List<String> ingredients,
+            @RequestParam(required = false) String match,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     );

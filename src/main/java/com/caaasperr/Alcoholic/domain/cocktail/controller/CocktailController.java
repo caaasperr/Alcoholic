@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/cocktails")
 public class CocktailController implements CocktailApi{
@@ -35,10 +37,15 @@ public class CocktailController implements CocktailApi{
 
     @GetMapping
     public ResponseEntity<GetCocktailsResponse> getCocktails(
+            @RequestParam(required = false) List<String> tags,
+            @RequestParam(required = false) List<String> ingredients,
+            @RequestParam(required = false, defaultValue = "match") String match,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
-        return ResponseEntity.ok(cocktailService.getCocktails(page, size));
+        boolean matchAll = "all".equalsIgnoreCase(match);
+        GetCocktailsResponse response = cocktailService.getCocktails(page, size, matchAll, tags, ingredients);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
