@@ -87,6 +87,20 @@ public class CocktailController implements CocktailApi{
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/{id}/ingredients")
+    public ResponseEntity<List<CocktailIngredient>> getIngredients(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(cocktailIngredientsService.getCocktailIngredients(id));
+    }
+
+    @GetMapping("/{id}/tags")
+    public ResponseEntity<List<CocktailTag>> getTags(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(cocktailTagsService.getCocktailTags(id));
+    }
+
     @GetMapping("/{id}/comments")
     public ResponseEntity<List<GetCommentResponse>> getComments(
             @PathVariable Long id
