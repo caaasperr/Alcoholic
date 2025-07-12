@@ -10,6 +10,9 @@ import com.caaasperr.Alcoholic.domain.comment.repository.CommentRepository;
 import com.caaasperr.Alcoholic.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
@@ -35,5 +38,9 @@ public class CommentService {
 
     public void deleteComment(Long id) {
         commentRepository.deleteById(id);
+    }
+
+    public List<GetCommentResponse> getCommentByCocktail(Long id) {
+        return commentRepository.findAllByCocktail_Id(id).stream().map(GetCommentResponse::of).toList();
     }
 }

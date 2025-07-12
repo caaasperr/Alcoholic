@@ -4,6 +4,9 @@ import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailIngredientsService;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailService;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailTagsService;
+import com.caaasperr.Alcoholic.domain.comment.dto.GetCommentResponse;
+import com.caaasperr.Alcoholic.domain.comment.repository.CommentRepository;
+import com.caaasperr.Alcoholic.domain.comment.service.CommentService;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +18,15 @@ import java.util.List;
 @RequestMapping("/cocktails")
 public class CocktailController implements CocktailApi{
     private final CocktailService cocktailService;
-    private final StepService stepService;
     private final CocktailIngredientsService cocktailIngredientsService;
     private final CocktailTagsService cocktailTagsService;
+    private final CommentService commentService;
 
-    public CocktailController(CocktailService cocktailService, StepService stepService, CocktailIngredientsService cocktailIngredientsService, CocktailTagsService cocktailTagsService) {
+    public CocktailController(CocktailService cocktailService, StepService stepService, CocktailIngredientsService cocktailIngredientsService, CocktailTagsService cocktailTagsService, CommentRepository commentRepository, CommentService commentService) {
         this.cocktailService = cocktailService;
-        this.stepService = stepService;
         this.cocktailIngredientsService = cocktailIngredientsService;
         this.cocktailTagsService = cocktailTagsService;
+        this.commentService = commentService;
     }
 
     @PostMapping
@@ -82,5 +85,12 @@ public class CocktailController implements CocktailApi{
         cocktailTagsService.addTagsToCocktail(id, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<List<GetCommentResponse>> getComments(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(commentService.getCommentByCocktail(id));
     }
 }
