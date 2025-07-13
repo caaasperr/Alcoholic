@@ -7,6 +7,7 @@ import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailTagsService;
 import com.caaasperr.Alcoholic.domain.comment.dto.GetCommentResponse;
 import com.caaasperr.Alcoholic.domain.comment.repository.CommentRepository;
 import com.caaasperr.Alcoholic.domain.comment.service.CommentService;
+import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,14 @@ public class CocktailController implements CocktailApi{
     private final CocktailIngredientsService cocktailIngredientsService;
     private final CocktailTagsService cocktailTagsService;
     private final CommentService commentService;
+    private final StepService stepService;
 
-    public CocktailController(CocktailService cocktailService, StepService stepService, CocktailIngredientsService cocktailIngredientsService, CocktailTagsService cocktailTagsService, CommentRepository commentRepository, CommentService commentService) {
+    public CocktailController(CocktailService cocktailService, StepService stepService, CocktailIngredientsService cocktailIngredientsService, CocktailTagsService cocktailTagsService, CommentService commentService) {
         this.cocktailService = cocktailService;
         this.cocktailIngredientsService = cocktailIngredientsService;
         this.cocktailTagsService = cocktailTagsService;
         this.commentService = commentService;
+        this.stepService = stepService;
     }
 
     @PostMapping
@@ -106,5 +109,12 @@ public class CocktailController implements CocktailApi{
             @PathVariable Long id
     ) {
         return ResponseEntity.ok(commentService.getCommentByCocktail(id));
+    }
+
+    @GetMapping("/{id}/steps")
+    public ResponseEntity<List<CocktailStep>> getSteps(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(stepService.getStepsByCocktailID(id));
     }
 }

@@ -4,6 +4,7 @@ import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
+import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.repository.IngredientRepository;
@@ -28,6 +29,10 @@ public class IngredientService {
     public void createIngredient(CreateIngredientRequest request) {
         Ingredient ingredient = request.toIngredient(makerRepository.findById(request.maker_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MAKER)));
         ingredientRepository.save(ingredient);
+    }
+
+    public GetIngredientResponse getIngredient(Long id) {
+        return GetIngredientResponse.of(ingredientRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INGREDIENT)));
     }
 
     public GetIngredientsResponse getIngredients(Integer page, Integer size) {

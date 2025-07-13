@@ -2,6 +2,7 @@ package com.caaasperr.Alcoholic.domain.cocktail.controller;
 
 import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
 import com.caaasperr.Alcoholic.domain.comment.dto.GetCommentResponse;
+import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -86,6 +87,12 @@ public interface CocktailApi {
     @ApiResponse(responseCode = "200")
     @Operation(summary = "칵테일 태그 조회")
     ResponseEntity<List<CocktailTag>> getTags(
+            @PathVariable Long id
+    );
+
+    @ApiResponse(responseCode = "200")
+    @Operation(summary = "칵테일 단계 조회")
+    ResponseEntity<List<CocktailStep>> getSteps(
             @PathVariable Long id
     );
 }

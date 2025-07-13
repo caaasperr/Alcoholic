@@ -1,6 +1,7 @@
 package com.caaasperr.Alcoholic.domain.ingredient.controller;
 
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
+import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.service.IngredientService;
@@ -32,6 +33,13 @@ public class IngredientController implements IngredientApi {
             @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(ingredientService.getIngredients(page, size));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetIngredientResponse> getIngredient(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(ingredientService.getIngredient(id));
     }
 
     @DeleteMapping("/{id}")

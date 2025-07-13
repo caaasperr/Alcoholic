@@ -1,6 +1,7 @@
 package com.caaasperr.Alcoholic.domain.ingredient.controller;
 
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
+import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,17 @@ public interface IngredientApi {
     ResponseEntity<GetIngredientsResponse> getIngredients(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @Operation(summary = "특정 재료 조회")
+    ResponseEntity<GetIngredientResponse> getIngredient(
+            @RequestParam(defaultValue = "1") Long id
     );
 
     @ApiResponses(

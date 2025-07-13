@@ -3,6 +3,7 @@ package com.caaasperr.Alcoholic.domain.step.service;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
+import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
 import com.caaasperr.Alcoholic.domain.step.dto.CreateStepRequest;
 import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.step.repository.StepRepository;
@@ -24,8 +25,8 @@ public class StepService {
         stepRepository.save(request.toStep(cocktailRepository.findById(request.cocktail_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL))));
     }
 
-    public List<Step> getStepsByCocktailID(Long id) {
-        return stepRepository.findAllByCocktail_IdOrderByOrderAsc(id);
+    public List<CocktailStep> getStepsByCocktailID(Long id) {
+        return stepRepository.findAllByCocktail_IdOrderByOrderAsc(id).stream().map(CocktailStep::from).toList();
     }
 
     public void deleteStep(Long id) {
