@@ -3,6 +3,8 @@ package com.caaasperr.Alcoholic.domain.user.dto;
 import com.caaasperr.Alcoholic.domain.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -21,11 +23,11 @@ public record RegisterRequest(
         @NotNull
         String password
 ) {
-    public User toUser() {
+    public User toUser(PasswordEncoder encoder) {
         return User.builder()
                 .email(email)
                 .username(username)
-                .password(password)
+                .password(encoder.encode(password))
                 .createdAt(LocalDateTime.now())
                 .build();
     }

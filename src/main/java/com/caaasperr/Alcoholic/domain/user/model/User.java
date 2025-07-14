@@ -33,5 +33,8 @@ public class User {
     @NotNull
     private String email;
 
+    @Builder.Default
+    private String role = "USER";
+
     private LocalDateTime createdAt;
 }
