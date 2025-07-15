@@ -2,9 +2,7 @@ package com.caaasperr.Alcoholic.domain.cocktail.service;
 
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.AddCocktailTagsRequest;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.CocktailIngredient;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.CocktailTag;
+import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
 import com.caaasperr.Alcoholic.domain.cocktail.model.CocktailIngredients;
 import com.caaasperr.Alcoholic.domain.cocktail.model.CocktailTags;
@@ -37,6 +35,18 @@ public class CocktailTagsService {
 
             cocktailTagsRepository.save(CocktailTags.builder().cocktail(cocktail).tag(tag).build());
         }
+    }
+
+    public void removeCocktailTags(Long cocktail_id, RemoveCocktailTagsRequest request) {
+        Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
+
+        List<CocktailTags> tagsToRemove = cocktailTagsRepository.findAllById(request.tagIds());
+
+        if (tagsToRemove.size() != request.tagIds().size()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_INGREDIENT);
+        }
+
+        cocktail.getTags().removeAll(tagsToRemove);
     }
 
     public List<CocktailTag> getCocktailTags(Long cocktailId) {

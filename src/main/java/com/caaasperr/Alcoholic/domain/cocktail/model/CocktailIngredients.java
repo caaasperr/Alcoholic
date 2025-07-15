@@ -27,4 +27,8 @@ public class CocktailIngredients {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
+
+    public void updateAmount(String amount) {
+        this.amount = amount;
+    }
 }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -72,6 +73,18 @@ public interface CocktailApi {
             @RequestBody AddCocktailTagsRequest request
     );
 
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @Operation(summary = "칵테일 태그 삭제")
+    ResponseEntity<Void> deleteTags(
+            @PathVariable Long id,
+            @RequestBody RemoveCocktailTagsRequest request
+    );
+
     @ApiResponse(responseCode = "200")
     @Operation(summary = "칵테일 댓글 조회")
     ResponseEntity<List<GetCommentResponse>> getComments(
@@ -82,6 +95,30 @@ public interface CocktailApi {
     @Operation(summary = "칵테일 재료 조회")
     ResponseEntity<List<CocktailIngredient>> getIngredients(
             @PathVariable Long id
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @Operation(summary = "칵테일 재료 수정")
+    ResponseEntity<Void> updateIngredients(
+            @PathVariable Long id,
+            @RequestBody UpdateIngredientAmountRequest request
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @Operation(summary = "칵테일 재료 삭제")
+    ResponseEntity<Void> deleteIngredients(
+            @PathVariable Long id,
+            @RequestBody RemoveCocktailIngredientsRequest request
     );
 
     @ApiResponse(responseCode = "200")

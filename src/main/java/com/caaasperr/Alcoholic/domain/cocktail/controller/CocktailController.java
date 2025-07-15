@@ -9,6 +9,7 @@ import com.caaasperr.Alcoholic.domain.comment.repository.CommentRepository;
 import com.caaasperr.Alcoholic.domain.comment.service.CommentService;
 import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
+import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +68,7 @@ public class CocktailController implements CocktailApi{
     ) {
         cocktailService.deleteCocktail(id);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/ingredients")
@@ -90,11 +91,40 @@ public class CocktailController implements CocktailApi{
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @DeleteMapping("/{id}/tags")
+    public ResponseEntity<Void> deleteTags(
+            @PathVariable Long id,
+            @RequestBody RemoveCocktailTagsRequest request
+    ) {
+        cocktailTagsService.removeCocktailTags(id, request);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{id}/ingredients")
     public ResponseEntity<List<CocktailIngredient>> getIngredients(
             @PathVariable Long id
     ) {
         return ResponseEntity.ok(cocktailIngredientsService.getCocktailIngredients(id));
+    }
+
+    @PutMapping("/{id}/ingredients")
+    public ResponseEntity<Void> updateIngredients(
+            @PathVariable Long id,
+            @RequestBody UpdateIngredientAmountRequest request
+    ) {
+        cocktailIngredientsService.updateIngredientAmounts(id, request.ingredients());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/ingredients")
+    public ResponseEntity<Void> deleteIngredients(
+            @PathVariable Long id,
+            @RequestBody RemoveCocktailIngredientsRequest request
+    ) {
+        cocktailIngredientsService.removeCocktailIngredients(id, request);
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/tags")

@@ -2,15 +2,14 @@ package com.caaasperr.Alcoholic.domain.cocktail.service;
 
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.AddCocktailIngredientsRequest;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.CocktailIngredient;
-import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailIngredientsRequest;
+import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
 import com.caaasperr.Alcoholic.domain.cocktail.model.CocktailIngredients;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailIngredientsRepository;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.repository.IngredientRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +40,35 @@ public class CocktailIngredientsService {
                     .build()
             );
         }
+    }
+
+    @Transactional
+    public void updateIngredientAmounts(Long cocktailId, List<UpdateIngredientAmountRequest.InnerIngredientAmountEntry> entries) {
+        Cocktail cocktail = cocktailRepository.findById(cocktailId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
+
+        List<CocktailIngredients> cocktailIngredients = cocktail.getIngredients();
+
+        for (UpdateIngredientAmountRequest.InnerIngredientAmountEntry entry : entries) {
+            CocktailIngredients matched = cocktailIngredients.stream()
+                    .filter(ci -> ci.getIngredient().getId().equals(entry.ingredient_id()))
+                    .findFirst()
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INGREDIENT));
+
+            matched.updateAmount(entry.amount());
+        }
+    }
+
+    public void removeCocktailIngredients(Long cocktail_id, RemoveCocktailIngredientsRequest request) {
+        Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
+
+        List<CocktailIngredients> ingredientsToRemove = cocktailIngredientsRepository.findAllById(request.ingredientIds());
+
+        if (ingredientsToRemove.size() != request.ingredientIds().size()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_INGREDIENT);
+        }
+
+        cocktail.getIngredients().removeAll(ingredientsToRemove);
     }
 
     public List<CocktailIngredient> getCocktailIngredients(Long cocktailId) {
