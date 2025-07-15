@@ -39,7 +39,7 @@ public interface MakerApi {
             }
     )
     @Operation(summary = "제조사 수정")
-    ResponseEntity<GetMakerResponse> updateMaker(
+    ResponseEntity<Void> updateMaker(
             @PathVariable Long id,
             @RequestBody UpdateMakerRequest request
     );
