@@ -3,6 +3,7 @@ package com.caaasperr.Alcoholic.domain.ingredient.controller;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
+import com.caaasperr.Alcoholic.domain.ingredient.dto.UpdateIngredientRequest;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.service.IngredientService;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ public class IngredientController implements IngredientApi {
             @RequestBody CreateIngredientRequest request
     ) {
         ingredientService.createIngredient(request);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -42,11 +44,22 @@ public class IngredientController implements IngredientApi {
         return ResponseEntity.ok(ingredientService.getIngredient(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateIngredient(
+            @PathVariable Long id,
+            @RequestBody UpdateIngredientRequest request
+    ) {
+        ingredientService.updateIngredient(id, request);
+
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteIngredient(
             @PathVariable Long id
     ) {
         ingredientService.deleteIngredient(id);
+        
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

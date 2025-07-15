@@ -6,9 +6,11 @@ import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
+import com.caaasperr.Alcoholic.domain.ingredient.dto.UpdateIngredientRequest;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.repository.IngredientRepository;
 import com.caaasperr.Alcoholic.domain.maker.repository.MakerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +44,31 @@ public class IngredientService {
         Page<Ingredient> ingredientPage = ingredientRepository.findAll(pageRequest);
 
         return GetIngredientsResponse.of(ingredientPage, criteria);
+    }
+
+    @Transactional
+    public void updateIngredient(Long ingredient_id, UpdateIngredientRequest request) {
+        Ingredient ingredient = ingredientRepository.findById(ingredient_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INGREDIENT));
+
+        if (request.maker_id() != null && !ingredient.getMaker().equals(makerRepository.findById((long) request.maker_id()).orElse(null))) {
+            ingredient.updateMaker(makerRepository.findById((long) request.maker_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MAKER)));
+        }
+
+        if (request.name() != null && !ingredient.getName().equals(request.name())) {
+            ingredient.updateName(request.name());
+        }
+
+        if (request.vol() != null && !ingredient.getVol().equals(request.vol())) {
+            ingredient.updateVol(request.vol());
+        }
+
+        if (request.type() != null && !ingredient.getType().equals(request.type())) {
+            ingredient.updateType(request.type());
+        }
+
+        if (request.description() != null && !ingredient.getDescription().equals(request.description())) {
+            ingredient.updateDescription(request.description());
+        }
     }
 
     public void deleteIngredient(Long id) {

@@ -5,11 +5,14 @@ import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
 import com.caaasperr.Alcoholic.domain.comment.dto.CreateCommentRequest;
 import com.caaasperr.Alcoholic.domain.comment.dto.GetCommentResponse;
+import com.caaasperr.Alcoholic.domain.comment.dto.UpdateCommentRequest;
 import com.caaasperr.Alcoholic.domain.comment.model.Comment;
 import com.caaasperr.Alcoholic.domain.comment.repository.CommentRepository;
 import com.caaasperr.Alcoholic.domain.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,17 @@ public class CommentService {
 
     public GetCommentResponse getComment(Long id) {
         return GetCommentResponse.of(commentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT)));
+    }
+
+    @Transactional
+    public void updateComment(Long id, UpdateCommentRequest request) {
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+
+        if (request.content() != null && !comment.getContent().equals(request.content())) {
+            comment.updateContent(request.content());
+        }
+
+        comment.updateUpdatedAt(LocalDateTime.now());
     }
 
     public void deleteComment(Long id) {

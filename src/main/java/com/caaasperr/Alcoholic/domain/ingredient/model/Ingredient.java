@@ -28,4 +28,24 @@ public class Ingredient {
     private Maker maker;
 
     private String description;
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateVol(Float vol) {
+        this.vol = vol;
+    }
+
+    public void updateType(String type) {
+        this.type = type;
+    }
+
+    public void updateMaker(Maker maker) {
+        this.maker = maker;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
 }
