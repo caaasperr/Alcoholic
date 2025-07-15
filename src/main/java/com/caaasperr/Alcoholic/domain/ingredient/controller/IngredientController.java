@@ -59,7 +59,7 @@ public class IngredientController implements IngredientApi {
             @PathVariable Long id
     ) {
         ingredientService.deleteIngredient(id);
-        
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

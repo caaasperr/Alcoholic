@@ -4,8 +4,10 @@ import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.maker.dto.CreateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.dto.GetMakerResponse;
+import com.caaasperr.Alcoholic.domain.maker.dto.UpdateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.model.Maker;
 import com.caaasperr.Alcoholic.domain.maker.repository.MakerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +24,27 @@ public class MakerService {
 
     public GetMakerResponse getMaker(Long id) {
         return GetMakerResponse.of(makerRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MAKER)));
+    }
+
+    @Transactional
+    public void updateMaker(Long id, UpdateMakerRequest request) {
+        Maker maker = makerRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MAKER));
+
+        if (request.name() != null && !maker.getName().equals(request.name())) {
+            maker.updateName(request.name());
+        }
+
+        if (request.country() != null && !maker.getCountry().equals(request.country())) {
+            maker.updateCountry(request.country());
+        }
+
+        if (request.type() != null && !maker.getType().equals(request.type())) {
+            maker.updateType(request.type());
+        }
+
+        if (request.description() != null && !maker.getDescription().equals(request.description())) {
+            maker.updateDescription(request.name());
+        }
     }
 
     public void deleteMaker(Long id) {

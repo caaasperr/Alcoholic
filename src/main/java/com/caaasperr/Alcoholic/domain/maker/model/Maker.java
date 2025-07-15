@@ -21,4 +21,20 @@ public class Maker {
     private String country;
     private String type;
     private String description;
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateCountry(String country) {
+        this.country = country;
+    }
+
+    public void updateType(String type) {
+        this.type = type;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
 }
