@@ -8,10 +8,7 @@ import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailsResponse;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.UpdateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
-import com.caaasperr.Alcoholic.domain.step.model.Step;
-import com.caaasperr.Alcoholic.domain.step.repository.StepRepository;
 import com.caaasperr.Alcoholic.domain.user.repository.UserRepository;
-import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -82,7 +79,11 @@ public class CocktailService {
                 cocktailPage = cocktailRepository.findAll(pageable);
             }
         } else {
-            cocktailPage = cocktailRepository.findByAnyTagsOrAnyIngredients(tags, ingredients, pageable);
+            if (hasTags || hasIngredients) {
+                cocktailPage = cocktailRepository.findByAnyTagsOrAnyIngredients(tags, ingredients, pageable);
+            } else {
+                cocktailPage = cocktailRepository.findAll(pageable);
+            }
         }
 
         return GetCocktailsResponse.of(cocktailPage, criteria);

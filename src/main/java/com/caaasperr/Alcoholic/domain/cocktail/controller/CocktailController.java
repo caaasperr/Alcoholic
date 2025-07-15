@@ -46,9 +46,9 @@ public class CocktailController implements CocktailApi{
     public ResponseEntity<GetCocktailsResponse> getCocktails(
             @RequestParam(required = false) List<String> tags,
             @RequestParam(required = false) List<String> ingredients,
-            @RequestParam(required = false, defaultValue = "match") String match,
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size
+            @RequestParam(required = false, defaultValue = "any") String match,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer size
     ) {
         boolean matchAll = "all".equalsIgnoreCase(match);
         GetCocktailsResponse response = cocktailService.getCocktails(page, size, matchAll, tags, ingredients);
