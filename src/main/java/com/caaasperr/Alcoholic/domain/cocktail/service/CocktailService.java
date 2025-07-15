@@ -5,17 +5,20 @@ import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailsResponse;
+import com.caaasperr.Alcoholic.domain.cocktail.dto.UpdateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
 import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.step.repository.StepRepository;
 import com.caaasperr.Alcoholic.domain.user.repository.UserRepository;
 import jakarta.persistence.Tuple;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -87,6 +90,29 @@ public class CocktailService {
 
     public Cocktail getCocktail(Long id) {
         return cocktailRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
+    }
+
+    @Transactional
+    public void updateCocktail(Long id, UpdateCocktailRequest request) {
+        Cocktail cocktail = cocktailRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
+
+        if (request.name() != null && !cocktail.getName().equals(request.name())) {
+            cocktail.updateName(request.name());
+        }
+
+        if (request.description() != null && !cocktail.getDescription().equals(request.description())) {
+            cocktail.updateDescription(request.description());
+        }
+
+        if (request.cover_image() != null && !cocktail.getCover_image().equals(request.cover_image())) {
+            cocktail.updateCover_image(request.cover_image());
+        }
+
+        if (request.vol() != null && !cocktail.getVol().equals(request.vol())) {
+            cocktail.updateVol(request.vol());
+        }
+
+        cocktail.updateUpdated_at(LocalDateTime.now());
     }
 
     public void deleteCocktail(Long id) {

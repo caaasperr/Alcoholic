@@ -51,4 +51,25 @@ public class Cocktail {
     private Float vol;
     private Long view;
     private LocalDateTime created_at;
+    private LocalDateTime updated_at;
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
+
+    public void updateCover_image(String cover_image) {
+        this.cover_image = cover_image;
+    }
+
+    public void updateVol(Float vol) {
+        this.vol = vol;
+    }
+
+    public void updateUpdated_at(LocalDateTime updated_at) {
+        this.updated_at = updated_at;
+    }
 }

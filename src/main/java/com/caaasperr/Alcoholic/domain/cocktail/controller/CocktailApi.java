@@ -51,6 +51,19 @@ public interface CocktailApi {
 
     @ApiResponses(
             value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "400"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @Operation(summary = "칵테일 수정")
+    ResponseEntity<Void> updateCocktail(
+            @PathVariable Long id,
+            @RequestBody UpdateCocktailRequest request
+    );
+
+    @ApiResponses(
+            value = {
                     @ApiResponse(responseCode = "204")
             }
     )

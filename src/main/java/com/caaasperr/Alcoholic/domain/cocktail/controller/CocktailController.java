@@ -52,6 +52,7 @@ public class CocktailController implements CocktailApi{
     ) {
         boolean matchAll = "all".equalsIgnoreCase(match);
         GetCocktailsResponse response = cocktailService.getCocktails(page, size, matchAll, tags, ingredients);
+
         return ResponseEntity.ok(response);
     }
 
@@ -60,6 +61,16 @@ public class CocktailController implements CocktailApi{
             @PathVariable Long id
     ) {
         return ResponseEntity.ok(GetCocktailResponse.of(cocktailService.getCocktail(id)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateCocktail(
+            @PathVariable Long id,
+            @RequestBody UpdateCocktailRequest request
+    ) {
+        cocktailService.updateCocktail(id, request);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
