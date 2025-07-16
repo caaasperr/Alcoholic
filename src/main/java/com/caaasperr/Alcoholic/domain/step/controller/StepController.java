@@ -1,6 +1,7 @@
 package com.caaasperr.Alcoholic.domain.step.controller;
 
 import com.caaasperr.Alcoholic.domain.step.dto.CreateStepRequest;
+import com.caaasperr.Alcoholic.domain.step.dto.UpdateStepRequest;
 import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,17 @@ public class StepController implements StepApi {
             @RequestBody CreateStepRequest request
     ) {
         stepService.createStep(request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateStep(
+            @PathVariable Long id,
+            @RequestBody UpdateStepRequest request
+    ) {
+        stepService.updateStep(id, request);
+
         return ResponseEntity.ok().build();
     }
 
@@ -28,6 +40,7 @@ public class StepController implements StepApi {
             @PathVariable Long id
     ) {
         stepService.deleteStep(id);
+
         return ResponseEntity.noContent().build();
     }
 }

@@ -5,8 +5,10 @@ import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
 import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
 import com.caaasperr.Alcoholic.domain.step.dto.CreateStepRequest;
+import com.caaasperr.Alcoholic.domain.step.dto.UpdateStepRequest;
 import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.step.repository.StepRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +29,15 @@ public class StepService {
 
     public List<CocktailStep> getStepsByCocktailID(Long id) {
         return stepRepository.findAllByCocktail_IdOrderByOrderAsc(id).stream().map(CocktailStep::from).toList();
+    }
+
+    @Transactional
+    public void updateStep(Long id, UpdateStepRequest request) {
+        Step step = stepRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
+
+        if (request.content() != null && !step.getContent().equals(request.content())) {
+            step.updateContent(request.content());
+        }
     }
 
     public void deleteStep(Long id) {

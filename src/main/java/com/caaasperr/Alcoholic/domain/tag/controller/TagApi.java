@@ -2,6 +2,7 @@ package com.caaasperr.Alcoholic.domain.tag.controller;
 
 import com.caaasperr.Alcoholic.domain.tag.dto.CreateTagRequest;
 import com.caaasperr.Alcoholic.domain.tag.dto.GetTagResponse;
+import com.caaasperr.Alcoholic.domain.tag.dto.UpdateTagRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -27,6 +28,19 @@ public interface TagApi {
     @Operation(summary = "태그 조회")
     ResponseEntity<GetTagResponse> getTag(
             @PathVariable Long id
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "400"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @Operation(summary = "태그 수정")
+    ResponseEntity<Void> updateTag(
+            @PathVariable Long id,
+            @RequestBody UpdateTagRequest request
     );
 
     @ApiResponses(

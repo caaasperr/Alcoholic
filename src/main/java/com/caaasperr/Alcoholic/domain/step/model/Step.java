@@ -27,4 +27,8 @@ public class Step {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cocktail_id")
     private Cocktail cocktail;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
