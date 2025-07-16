@@ -1,5 +1,6 @@
 package com.caaasperr.Alcoholic._common.session.service;
 
+import com.caaasperr.Alcoholic._common.session.model.CustomUserDetails;
 import com.caaasperr.Alcoholic.domain.user.model.User;
 import com.caaasperr.Alcoholic.domain.user.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,10 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("유저 없음"));
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
-        );
+        return new CustomUserDetails(user);
     }
 }

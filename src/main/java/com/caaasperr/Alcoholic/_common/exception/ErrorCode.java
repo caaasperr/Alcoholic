@@ -24,7 +24,10 @@ public enum ErrorCode {
     NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "Could not find comment"),
 
     //NOT_FOUND_INGREDIENT
-    NOT_FOUND_INGREDIENT(HttpStatus.NOT_FOUND, "Could not find ingredient");
+    NOT_FOUND_INGREDIENT(HttpStatus.NOT_FOUND, "Could not find ingredient"),
+
+    //Error code for Rating
+    DUPLICATED_RATING(HttpStatus.CONFLICT, "Duplicated rating");
 
     private final HttpStatus httpStatus;
     private final String message;
