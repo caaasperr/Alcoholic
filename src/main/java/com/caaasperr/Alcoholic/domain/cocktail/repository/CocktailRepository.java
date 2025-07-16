@@ -110,4 +110,7 @@ public interface CocktailRepository extends JpaRepository<Cocktail, Long> {
             @Param("ingredientCount") long ingredientCount
     );
 
+    Page<Cocktail> findByNameContaining(String keyword, Pageable pageable);
+
+    int countByNameContaining(String keyword);
 }

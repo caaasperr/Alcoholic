@@ -4,6 +4,7 @@ import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailRequest;
+import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailResponse;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailsResponse;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.UpdateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CocktailService {
@@ -91,6 +93,19 @@ public class CocktailService {
 
     public Cocktail getCocktail(Long id) {
         return cocktailRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
+    }
+
+    public GetCocktailsResponse searchByName(String query, Integer page, Integer size) {
+        if (query == null || query.trim().isEmpty()) {
+            return new GetCocktailsResponse(List.of(), page, size, 0, 0);
+        }
+
+        long total = cocktailRepository.countByNameContaining(query);
+        Criteria criteria = Criteria.of(page, size, (int) total);
+        Pageable pageable = PageRequest.of(criteria.getPage(), criteria.getSize());
+
+        Page<Cocktail> cocktailPage = cocktailRepository.findByNameContaining(query, pageable);
+        return GetCocktailsResponse.of(cocktailPage, criteria);
     }
 
     @Transactional

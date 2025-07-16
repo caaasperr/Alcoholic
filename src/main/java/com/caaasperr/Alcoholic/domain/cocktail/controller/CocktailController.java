@@ -63,6 +63,15 @@ public class CocktailController implements CocktailApi{
         return ResponseEntity.ok(GetCocktailResponse.of(cocktailService.getCocktail(id)));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<GetCocktailsResponse> searchByName(
+            @RequestParam String query,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer size
+    ) {
+        return ResponseEntity.ok(cocktailService.searchByName(query, page, size));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCocktail(
             @PathVariable Long id,

@@ -52,6 +52,19 @@ public interface CocktailApi {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @Operation(summary = "칵테일 검색")
+    ResponseEntity<GetCocktailsResponse> searchByName(
+            @RequestParam String query,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer size
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
                     @ApiResponse(responseCode = "400"),
                     @ApiResponse(responseCode = "404")
             }
