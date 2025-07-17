@@ -3,6 +3,7 @@ package com.caaasperr.Alcoholic.domain.cocktail.service;
 import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
+import com.caaasperr.Alcoholic._common.image.ImageHandler;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailResponse;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailsResponse;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -25,14 +27,22 @@ import java.util.stream.Collectors;
 public class CocktailService {
     private final CocktailRepository cocktailRepository;
     private final UserRepository userRepository;
+    private final ImageHandler imageHandler;
 
-    public CocktailService(CocktailRepository cocktailRepository, UserRepository userRepository) {
+    public CocktailService(CocktailRepository cocktailRepository, UserRepository userRepository, ImageHandler imageHandler) {
         this.cocktailRepository = cocktailRepository;
         this.userRepository = userRepository;
+        this.imageHandler = imageHandler;
     }
 
-    public void createCocktail(CreateCocktailRequest request) {
-        cocktailRepository.save(request.toCocktail(userRepository.findById(request.user_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER))));
+    public void createCocktail(CreateCocktailRequest request) throws IOException {
+        String imagePath = request.cover_image() != null ? imageHandler.saveImage(request.cover_image()) : null;
+        cocktailRepository.save(
+                request.toCocktail(
+                        userRepository.findById(request.user_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER)),
+                        imagePath
+                )
+        );
     }
 
     public GetCocktailsResponse getCocktails(
@@ -109,7 +119,7 @@ public class CocktailService {
     }
 
     @Transactional
-    public void updateCocktail(Long id, UpdateCocktailRequest request) {
+    public void updateCocktail(Long id, UpdateCocktailRequest request) throws IOException {
         Cocktail cocktail = cocktailRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
 
         if (request.name() != null && !cocktail.getName().equals(request.name())) {
@@ -120,8 +130,12 @@ public class CocktailService {
             cocktail.updateDescription(request.description());
         }
 
-        if (request.cover_image() != null && !cocktail.getCover_image().equals(request.cover_image())) {
-            cocktail.updateCover_image(request.cover_image());
+        String newImage = "/uploads/" + request.cover_image().getOriginalFilename();
+        String oldImage = cocktail.getCover_image();
+
+        if (newImage != null && (oldImage == null || !oldImage.equals(newImage))) {
+            String imagePath = imageHandler.saveImage(request.cover_image());
+            cocktail.updateCover_image(imagePath);
         }
 
         if (request.vol() != null && !cocktail.getVol().equals(request.vol())) {

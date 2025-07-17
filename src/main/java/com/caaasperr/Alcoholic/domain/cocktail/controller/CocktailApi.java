@@ -9,10 +9,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "Cocktail", description = "Cocktail API")
@@ -20,8 +22,8 @@ public interface CocktailApi {
     @ApiResponse(responseCode = "201")
     @Operation(summary = "칵테일 생성")
     ResponseEntity<Void> createCocktail(
-            @RequestBody CreateCocktailRequest request
-    );
+            @ModelAttribute CreateCocktailRequest request
+    ) throws IOException;
 
     @ApiResponses(
             value = {
@@ -73,7 +75,7 @@ public interface CocktailApi {
     ResponseEntity<Void> updateCocktail(
             @PathVariable Long id,
             @RequestBody UpdateCocktailRequest request
-    );
+    ) throws IOException;
 
     @ApiResponses(
             value = {
