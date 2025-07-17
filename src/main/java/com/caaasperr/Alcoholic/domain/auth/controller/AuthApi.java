@@ -16,7 +16,7 @@ public interface AuthApi {
             }
     )
     @Operation(summary = "세션 정보")
-    ResponseEntity<Void> getSession(Authentication authentication);
+    ResponseEntity<?> getSession(Authentication authentication);
 
     @ApiResponses(
             value = {
@@ -25,5 +25,5 @@ public interface AuthApi {
             }
     )
     @Operation(summary = "세션 검증")
-    ResponseEntity<Void> validateSession(Authentication authentication);
+    ResponseEntity<?> validateSession(Authentication authentication);
 }

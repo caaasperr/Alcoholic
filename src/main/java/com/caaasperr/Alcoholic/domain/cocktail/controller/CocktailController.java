@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -77,18 +78,20 @@ public class CocktailController implements CocktailApi{
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCocktail(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateCocktailRequest request
+            @Valid @ModelAttribute UpdateCocktailRequest request,
+            Authentication authentication
     ) throws IOException{
-        cocktailService.updateCocktail(id, request);
+        cocktailService.updateCocktail(id, request, authentication);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCocktail(
-            @PathVariable Long id
+            @PathVariable Long id,
+            Authentication authentication
     ) {
-        cocktailService.deleteCocktail(id);
+        cocktailService.deleteCocktail(id, authentication);
 
         return ResponseEntity.noContent().build();
     }
@@ -96,9 +99,10 @@ public class CocktailController implements CocktailApi{
     @PostMapping("/{id}/ingredients")
     public ResponseEntity<Void> addIngredients(
             @PathVariable Long id,
-            @RequestBody AddCocktailIngredientsRequest request
+            @RequestBody AddCocktailIngredientsRequest request,
+            Authentication authentication
     ) {
-        cocktailIngredientsService.addCocktailIngredients(id, request);
+        cocktailIngredientsService.addCocktailIngredients(id, request, authentication);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -106,9 +110,10 @@ public class CocktailController implements CocktailApi{
     @PostMapping("/{id}/tags")
     public ResponseEntity<Void> addTags(
             @PathVariable Long id,
-            @RequestBody AddCocktailTagsRequest request
+            @RequestBody AddCocktailTagsRequest request,
+            Authentication authentication
     ) {
-        cocktailTagsService.addTagsToCocktail(id, request);
+        cocktailTagsService.addTagsToCocktail(id, request, authentication);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -116,9 +121,10 @@ public class CocktailController implements CocktailApi{
     @DeleteMapping("/{id}/tags")
     public ResponseEntity<Void> deleteTags(
             @PathVariable Long id,
-            @RequestBody RemoveCocktailTagsRequest request
+            @RequestBody RemoveCocktailTagsRequest request,
+            Authentication authentication
     ) {
-        cocktailTagsService.removeCocktailTags(id, request);
+        cocktailTagsService.removeCocktailTags(id, request, authentication);
 
         return ResponseEntity.noContent().build();
     }
@@ -133,18 +139,20 @@ public class CocktailController implements CocktailApi{
     @PutMapping("/{id}/ingredients")
     public ResponseEntity<Void> updateIngredients(
             @PathVariable Long id,
-            @RequestBody UpdateIngredientAmountRequest request
+            @RequestBody UpdateIngredientAmountRequest request,
+            Authentication authentication
     ) {
-        cocktailIngredientsService.updateIngredientAmounts(id, request.ingredients());
+        cocktailIngredientsService.updateIngredientAmounts(id, request.ingredients(), authentication);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}/ingredients")
     public ResponseEntity<Void> deleteIngredients(
             @PathVariable Long id,
-            @RequestBody RemoveCocktailIngredientsRequest request
+            @RequestBody RemoveCocktailIngredientsRequest request,
+            Authentication authentication
     ) {
-        cocktailIngredientsService.removeCocktailIngredients(id, request);
+        cocktailIngredientsService.removeCocktailIngredients(id, request, authentication);
 
         return ResponseEntity.noContent().build();
     }

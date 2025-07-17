@@ -21,7 +21,7 @@ public class StepController implements StepApi {
 
     @PostMapping
     public ResponseEntity<Void> createStep(
-            @Valid @RequestBody CreateStepRequest request
+            @Valid @ModelAttribute CreateStepRequest request
     ) throws IOException {
         stepService.createStep(request);
 
@@ -31,7 +31,7 @@ public class StepController implements StepApi {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateStep(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateStepRequest request
+            @Valid @ModelAttribute UpdateStepRequest request
     ) throws IOException {
         stepService.updateStep(id, request);
 

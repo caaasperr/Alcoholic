@@ -27,7 +27,10 @@ public enum ErrorCode {
     NOT_FOUND_INGREDIENT(HttpStatus.NOT_FOUND, "Could not find ingredient"),
 
     //Error code for Rating
-    DUPLICATED_RATING(HttpStatus.CONFLICT, "Duplicated rating");
+    DUPLICATED_RATING(HttpStatus.CONFLICT, "Duplicated rating"),
+
+    //Error code for middleware
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "Access denied");
 
     private final HttpStatus httpStatus;
     private final String message;

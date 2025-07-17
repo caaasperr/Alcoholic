@@ -1,5 +1,6 @@
 package com.caaasperr.Alcoholic.domain.cocktail.service;
 
+import com.caaasperr.Alcoholic._common.annotation.CheckCocktailOwner;
 import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
@@ -15,6 +16,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +24,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CocktailService {
@@ -119,8 +120,9 @@ public class CocktailService {
         return GetCocktailsResponse.of(cocktailPage, criteria);
     }
 
+    @CheckCocktailOwner
     @Transactional
-    public void updateCocktail(Long id, UpdateCocktailRequest request) throws IOException {
+    public void updateCocktail(Long id, UpdateCocktailRequest request, Authentication authentication) throws IOException {
         Cocktail cocktail = cocktailRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
 
         if (request.name() != null && !cocktail.getName().equals(request.name())) {
@@ -151,7 +153,8 @@ public class CocktailService {
         cocktail.updateUpdated_at(LocalDateTime.now());
     }
 
-    public void deleteCocktail(Long id) {
+    @CheckCocktailOwner
+    public void deleteCocktail(Long id, Authentication authentication) {
         cocktailRepository.deleteById(id);
     }
 }

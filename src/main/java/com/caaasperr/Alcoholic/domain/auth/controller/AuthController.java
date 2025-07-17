@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthApi{
     @GetMapping("/session")
     public ResponseEntity<?> getSession(Authentication authentication) {
         if (authentication == null) {

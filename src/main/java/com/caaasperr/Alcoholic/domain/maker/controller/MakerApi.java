@@ -2,6 +2,7 @@ package com.caaasperr.Alcoholic.domain.maker.controller;
 
 import com.caaasperr.Alcoholic.domain.maker.dto.CreateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.dto.GetMakerResponse;
+import com.caaasperr.Alcoholic.domain.maker.dto.GetMakersResponse;
 import com.caaasperr.Alcoholic.domain.maker.dto.UpdateMakerRequest;
 import com.caaasperr.Alcoholic.domain.user.dto.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Maker", description = "Maker API")
 public interface MakerApi {
@@ -29,6 +31,17 @@ public interface MakerApi {
     @Operation(summary = "제조사 조회")
     ResponseEntity<GetMakerResponse> getMaker(
             @PathVariable Long id
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200")
+            }
+    )
+    @Operation(summary = "제조사 전체 조회")
+    ResponseEntity<GetMakersResponse> getMakers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     );
 
     @ApiResponses(

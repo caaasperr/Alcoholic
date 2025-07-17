@@ -5,6 +5,8 @@ import com.caaasperr.Alcoholic.domain.rating.dto.CreateRatingRequest;
 import com.caaasperr.Alcoholic.domain.rating.dto.GetCocktailRating;
 import com.caaasperr.Alcoholic.domain.rating.dto.GetRatingResponse;
 import com.caaasperr.Alcoholic.domain.rating.service.RatingService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +21,12 @@ public class RatingController implements RatingApi {
         this.ratingService = ratingService;
     }
 
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201"),
+                    @ApiResponse(responseCode = "400")
+            }
+    )
     @PostMapping("/{cocktailId}/rating")
     public ResponseEntity<Void> createRating(
             @PathVariable Long cocktailId,
@@ -30,11 +38,24 @@ public class RatingController implements RatingApi {
         return ResponseEntity.ok().build();
     }
 
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200")
+            }
+    )
     @GetMapping("/{cocktailId}/rating")
-    public ResponseEntity<GetCocktailRating> getAverageRating(@PathVariable Long cocktailId) {
+    public ResponseEntity<GetCocktailRating> getAverageRating(
+            @PathVariable Long cocktailId
+    ) {
         return ResponseEntity.ok(ratingService.getAverageRating(cocktailId));
     }
 
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
     @GetMapping("/{cocktailId}/rating/me")
     public ResponseEntity<GetRatingResponse> getMyRating(
             @PathVariable Long cocktailId,
@@ -45,6 +66,12 @@ public class RatingController implements RatingApi {
                 .orElse(ResponseEntity.noContent().build());
     }
 
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
     @DeleteMapping("/{cocktailId}/rating")
     public ResponseEntity<Void> deleteRating(
             @PathVariable Long cocktailId,

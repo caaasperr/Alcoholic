@@ -1,13 +1,17 @@
 package com.caaasperr.Alcoholic.domain.maker.service;
 
+import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.maker.dto.CreateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.dto.GetMakerResponse;
+import com.caaasperr.Alcoholic.domain.maker.dto.GetMakersResponse;
 import com.caaasperr.Alcoholic.domain.maker.dto.UpdateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.model.Maker;
 import com.caaasperr.Alcoholic.domain.maker.repository.MakerRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +28,14 @@ public class MakerService {
 
     public GetMakerResponse getMaker(Long id) {
         return GetMakerResponse.of(makerRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MAKER)));
+    }
+
+    public GetMakersResponse getMakers(Integer page, Integer size) {
+        Criteria criteria = Criteria.of(page, size);
+        PageRequest pageRequest = PageRequest.of(criteria.getPage(), criteria.getSize());
+        Page<Maker> makers = makerRepository.findAll(pageRequest);
+
+        return GetMakersResponse.of(makers, criteria);
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.caaasperr.Alcoholic.domain.maker.controller;
 
 import com.caaasperr.Alcoholic.domain.maker.dto.CreateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.dto.GetMakerResponse;
+import com.caaasperr.Alcoholic.domain.maker.dto.GetMakersResponse;
 import com.caaasperr.Alcoholic.domain.maker.dto.UpdateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.model.Maker;
 import com.caaasperr.Alcoholic.domain.maker.service.MakerService;
@@ -32,6 +33,14 @@ public class MakerController implements MakerApi {
             @PathVariable Long id
     ) {
         return ResponseEntity.ok(makerService.getMaker(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<GetMakersResponse> getMakers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(makerService.getMakers(page, size));
     }
 
     @PutMapping("/{id}")

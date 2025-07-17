@@ -1,5 +1,6 @@
 package com.caaasperr.Alcoholic.domain.cocktail.service;
 
+import com.caaasperr.Alcoholic._common.annotation.CheckCocktailOwner;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
@@ -10,6 +11,7 @@ import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.repository.IngredientRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +29,8 @@ public class CocktailIngredientsService {
         this.ingredientRepository = ingredientRepository;
     }
 
-    public void addCocktailIngredients(Long cocktail_id, AddCocktailIngredientsRequest request) {
+    @CheckCocktailOwner
+    public void addCocktailIngredients(Long cocktail_id, AddCocktailIngredientsRequest request, Authentication authentication) {
         Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
 
         for (CreateCocktailIngredientsRequest ingredientsRequest : request.ingredients()) {
@@ -42,8 +45,9 @@ public class CocktailIngredientsService {
         }
     }
 
+    @CheckCocktailOwner
     @Transactional
-    public void updateIngredientAmounts(Long cocktailId, List<UpdateIngredientAmountRequest.InnerIngredientAmountEntry> entries) {
+    public void updateIngredientAmounts(Long cocktailId, List<UpdateIngredientAmountRequest.InnerIngredientAmountEntry> entries, Authentication authentication) {
         Cocktail cocktail = cocktailRepository.findById(cocktailId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
 
@@ -59,7 +63,8 @@ public class CocktailIngredientsService {
         }
     }
 
-    public void removeCocktailIngredients(Long cocktail_id, RemoveCocktailIngredientsRequest request) {
+    @CheckCocktailOwner
+    public void removeCocktailIngredients(Long cocktail_id, RemoveCocktailIngredientsRequest request, Authentication authentication) {
         Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
 
         List<CocktailIngredients> ingredientsToRemove = cocktailIngredientsRepository.findAllById(request.ingredientIds());

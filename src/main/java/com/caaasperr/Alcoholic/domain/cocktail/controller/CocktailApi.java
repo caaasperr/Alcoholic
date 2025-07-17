@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,49 +68,71 @@ public interface CocktailApi {
             value = {
                     @ApiResponse(responseCode = "200"),
                     @ApiResponse(responseCode = "400"),
+                    @ApiResponse(responseCode = "403"),
                     @ApiResponse(responseCode = "404")
             }
     )
     @Operation(summary = "칵테일 수정")
     ResponseEntity<Void> updateCocktail(
             @PathVariable Long id,
-            @RequestBody UpdateCocktailRequest request
+            @ModelAttribute UpdateCocktailRequest request,
+            Authentication authentication
     ) throws IOException;
 
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204")
+                    @ApiResponse(responseCode = "204"),
+                    @ApiResponse(responseCode = "403"),
+                    @ApiResponse(responseCode = "404")
             }
     )
     @Operation(summary = "칵테일 삭제")
     ResponseEntity<Void> deleteCocktail(
-            @PathVariable Long id
+            @PathVariable Long id,
+            Authentication authentication
     );
 
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "403"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
     @ApiResponse(responseCode = "201")
     @Operation(summary = "칵테일 레시피 재료 추가")
     ResponseEntity<Void> addIngredients(
             @PathVariable Long id,
-            @RequestBody AddCocktailIngredientsRequest request
+            @RequestBody AddCocktailIngredientsRequest request,
+            Authentication authentication
     );
 
-    @ApiResponse(responseCode = "201")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201"),
+                    @ApiResponse(responseCode = "403"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
     @Operation(summary = "칵테일 태그 추가")
     ResponseEntity<Void> addTags(
             @PathVariable Long id,
-            @RequestBody AddCocktailTagsRequest request
+            @RequestBody AddCocktailTagsRequest request,
+            Authentication authentication
     );
 
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204"),
+                    @ApiResponse(responseCode = "403"),
                     @ApiResponse(responseCode = "404")
             }
     )
     @Operation(summary = "칵테일 태그 삭제")
     ResponseEntity<Void> deleteTags(
             @PathVariable Long id,
-            @RequestBody RemoveCocktailTagsRequest request
+            @RequestBody RemoveCocktailTagsRequest request,
+            Authentication authentication
     );
 
     @ApiResponse(responseCode = "200")
@@ -128,25 +150,29 @@ public interface CocktailApi {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "403"),
                     @ApiResponse(responseCode = "404")
             }
     )
     @Operation(summary = "칵테일 재료 수정")
     ResponseEntity<Void> updateIngredients(
             @PathVariable Long id,
-            @RequestBody UpdateIngredientAmountRequest request
+            @RequestBody UpdateIngredientAmountRequest request,
+            Authentication authentication
     );
 
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204"),
+                    @ApiResponse(responseCode = "403"),
                     @ApiResponse(responseCode = "404")
             }
     )
     @Operation(summary = "칵테일 재료 삭제")
     ResponseEntity<Void> deleteIngredients(
             @PathVariable Long id,
-            @RequestBody RemoveCocktailIngredientsRequest request
+            @RequestBody RemoveCocktailIngredientsRequest request,
+            Authentication authentication
     );
 
     @ApiResponse(responseCode = "200")
