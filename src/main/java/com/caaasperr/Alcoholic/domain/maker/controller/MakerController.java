@@ -5,6 +5,7 @@ import com.caaasperr.Alcoholic.domain.maker.dto.GetMakerResponse;
 import com.caaasperr.Alcoholic.domain.maker.dto.UpdateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.model.Maker;
 import com.caaasperr.Alcoholic.domain.maker.service.MakerService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class MakerController implements MakerApi {
 
     @PostMapping
     public ResponseEntity<Void> createMaker(
-            @RequestBody CreateMakerRequest request
+            @Valid @RequestBody CreateMakerRequest request
     ) {
         makerService.createMaker(request);
 
@@ -36,7 +37,7 @@ public class MakerController implements MakerApi {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateMaker(
             @PathVariable Long id,
-            @RequestBody UpdateMakerRequest request
+            @Valid @RequestBody UpdateMakerRequest request
     ) {
         makerService.updateMaker(id, request);
 

@@ -4,6 +4,7 @@ import com.caaasperr.Alcoholic.domain.step.dto.CreateStepRequest;
 import com.caaasperr.Alcoholic.domain.step.dto.UpdateStepRequest;
 import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class StepController implements StepApi {
 
     @PostMapping
     public ResponseEntity<Void> createStep(
-            @RequestBody CreateStepRequest request
+            @Valid @RequestBody CreateStepRequest request
     ) {
         stepService.createStep(request);
 
@@ -28,7 +29,7 @@ public class StepController implements StepApi {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateStep(
             @PathVariable Long id,
-            @RequestBody UpdateStepRequest request
+            @Valid @RequestBody UpdateStepRequest request
     ) {
         stepService.updateStep(id, request);
 

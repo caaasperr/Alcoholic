@@ -1,7 +1,6 @@
 package com.caaasperr.Alcoholic.domain.cocktail.dto;
 
 import com.caaasperr.Alcoholic.domain.cocktail.model.CocktailIngredients;
-import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 
 public record CocktailIngredient(
         Long id,

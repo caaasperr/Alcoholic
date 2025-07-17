@@ -35,7 +35,6 @@ public class IngredientService {
     }
 
     public GetIngredientsResponse getIngredients(Integer page, Integer size) {
-        long total = ingredientRepository.count();
         Criteria criteria = Criteria.of(page, size);
         PageRequest pageRequest = PageRequest.of(criteria.getPage(), criteria.getSize());
         Page<Ingredient> ingredientPage = ingredientRepository.findAll(pageRequest);

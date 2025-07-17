@@ -2,7 +2,6 @@ package com.caaasperr.Alcoholic.domain.ingredient.dto;
 
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.maker.dto.GetMakerResponse;
-import com.caaasperr.Alcoholic.domain.maker.model.Maker;
 
 public record GetIngredientResponse(
         GetMakerResponse maker,

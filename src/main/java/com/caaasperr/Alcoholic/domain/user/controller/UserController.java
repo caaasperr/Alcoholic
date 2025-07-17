@@ -3,8 +3,10 @@ package com.caaasperr.Alcoholic.domain.user.controller;
 import com.caaasperr.Alcoholic.domain.user.dto.GetUserResponse;
 import com.caaasperr.Alcoholic.domain.user.dto.RegisterRequest;
 import com.caaasperr.Alcoholic.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +20,7 @@ public class UserController implements UserApi {
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(
-            @RequestBody RegisterRequest request
+            @RequestBody @Valid RegisterRequest request
     ) {
         userService.register(request);
 

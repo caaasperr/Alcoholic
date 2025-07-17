@@ -5,12 +5,10 @@ import com.caaasperr.Alcoholic.domain.rating.dto.CreateRatingRequest;
 import com.caaasperr.Alcoholic.domain.rating.dto.GetCocktailRating;
 import com.caaasperr.Alcoholic.domain.rating.dto.GetRatingResponse;
 import com.caaasperr.Alcoholic.domain.rating.service.RatingService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/cocktails")
@@ -24,7 +22,7 @@ public class RatingController implements RatingApi {
     @PostMapping("/{cocktailId}/rating")
     public ResponseEntity<Void> createRating(
             @PathVariable Long cocktailId,
-            @RequestBody CreateRatingRequest request,
+            @Valid @RequestBody CreateRatingRequest request,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         ratingService.createRating(cocktailId, customUserDetails.getId(), request);

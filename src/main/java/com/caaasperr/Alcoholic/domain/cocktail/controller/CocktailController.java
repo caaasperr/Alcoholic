@@ -9,6 +9,7 @@ import com.caaasperr.Alcoholic.domain.comment.repository.CommentRepository;
 import com.caaasperr.Alcoholic.domain.comment.service.CommentService;
 import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
+import jakarta.validation.Valid;
 import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class CocktailController implements CocktailApi{
 
     @PostMapping
     public ResponseEntity<Void> createCocktail(
-            @RequestBody CreateCocktailRequest request
+            @Valid @RequestBody CreateCocktailRequest request
     ) {
         cocktailService.createCocktail(request);
 
@@ -75,7 +76,7 @@ public class CocktailController implements CocktailApi{
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCocktail(
             @PathVariable Long id,
-            @RequestBody UpdateCocktailRequest request
+            @Valid @RequestBody UpdateCocktailRequest request
     ) {
         cocktailService.updateCocktail(id, request);
 

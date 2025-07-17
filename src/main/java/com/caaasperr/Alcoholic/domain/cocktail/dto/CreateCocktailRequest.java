@@ -3,7 +3,7 @@ package com.caaasperr.Alcoholic.domain.cocktail.dto;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
 import com.caaasperr.Alcoholic.domain.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -17,15 +17,21 @@ public record CreateCocktailRequest(
 
         @Schema(description = "칵테일 이름", example = "피나 콜라다", requiredMode = REQUIRED)
         @NotNull
+        @NotBlank
+        @Size(max = 100)
         String name,
 
         @Schema(description = "설명", example = "럼 베이스 칵테일")
+        @Size(max = 500)
         String description,
 
         @Schema(description = "사진 URL", example = "https://example.com/exmaple.jpg")
+        @Size(max = 255)
         String cover_image,
 
         @Schema(description = "도수", example = "5")
+        @DecimalMax(value = "100.0", message = "vol은 최대 100.0까지 허용됩니다.")
+        @DecimalMin(value = "0", message = "vol은 최소 0까지 허용됩니다.")
         Float vol
 ) {
     public Cocktail toCocktail(User user) {

@@ -6,6 +6,7 @@ import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.UpdateIngredientRequest;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import com.caaasperr.Alcoholic.domain.ingredient.service.IngredientService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class IngredientController implements IngredientApi {
 
     @PostMapping
     public ResponseEntity<Void> createIngredient(
-            @RequestBody CreateIngredientRequest request
+            @Valid @RequestBody CreateIngredientRequest request
     ) {
         ingredientService.createIngredient(request);
 
@@ -47,7 +48,7 @@ public class IngredientController implements IngredientApi {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateIngredient(
             @PathVariable Long id,
-            @RequestBody UpdateIngredientRequest request
+            @Valid @RequestBody UpdateIngredientRequest request
     ) {
         ingredientService.updateIngredient(id, request);
 

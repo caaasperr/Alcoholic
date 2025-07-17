@@ -4,6 +4,7 @@ import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
 import com.caaasperr.Alcoholic.domain.step.model.Step;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -14,9 +15,11 @@ public record CreateStepRequest(
 
         @Schema(description = "내용", example = "재료를 모두 넣고 섞는다", requiredMode = REQUIRED)
         @NotNull
+        @Size(max = 500)
         String content,
 
         @Schema(description = "이미지 URL", example = "example.com/example.jpg")
+        @Size(max = 255)
         String image,
 
         @Schema(description = "단계 순서", example = "0", requiredMode = REQUIRED)

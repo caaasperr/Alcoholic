@@ -1,10 +1,10 @@
 package com.caaasperr.Alcoholic.domain.tag.controller;
 
-import com.caaasperr.Alcoholic.domain.maker.dto.CreateMakerRequest;
 import com.caaasperr.Alcoholic.domain.tag.dto.CreateTagRequest;
 import com.caaasperr.Alcoholic.domain.tag.dto.GetTagResponse;
 import com.caaasperr.Alcoholic.domain.tag.dto.UpdateTagRequest;
 import com.caaasperr.Alcoholic.domain.tag.service.TagService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ public class TagController implements TagApi {
 
     @PostMapping
     public ResponseEntity<Void> createTag(
-            @RequestBody CreateTagRequest request
+            @Valid @RequestBody CreateTagRequest request
     ) {
         tagService.createTag(request);
 
@@ -36,7 +36,7 @@ public class TagController implements TagApi {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTag(
             @PathVariable Long id,
-            @RequestBody UpdateTagRequest request
+            @Valid @RequestBody UpdateTagRequest request
     ) {
         tagService.updateTag(id, request);
 
