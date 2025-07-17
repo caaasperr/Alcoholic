@@ -1,16 +1,16 @@
 package com.caaasperr.Alcoholic.domain.cocktail.controller;
 
+import com.caaasperr.Alcoholic._common.annotation.CheckCocktailOwner;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailIngredientsService;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailService;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailTagsService;
 import com.caaasperr.Alcoholic.domain.comment.dto.GetCommentResponse;
-import com.caaasperr.Alcoholic.domain.comment.repository.CommentRepository;
 import com.caaasperr.Alcoholic.domain.comment.service.CommentService;
 import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
+import com.caaasperr.Alcoholic.domain.step.dto.ReorderStepRequest;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
 import jakarta.validation.Valid;
-import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -38,9 +38,10 @@ public class CocktailController implements CocktailApi{
 
     @PostMapping
     public ResponseEntity<Void> createCocktail(
-            @Valid @ModelAttribute CreateCocktailRequest request
+            @Valid @ModelAttribute CreateCocktailRequest request,
+            Authentication authentication
     ) throws IOException {
-        cocktailService.createCocktail(request);
+        cocktailService.createCocktail(request, authentication);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -94,87 +95,5 @@ public class CocktailController implements CocktailApi{
         cocktailService.deleteCocktail(id, authentication);
 
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{id}/ingredients")
-    public ResponseEntity<Void> addIngredients(
-            @PathVariable Long id,
-            @RequestBody AddCocktailIngredientsRequest request,
-            Authentication authentication
-    ) {
-        cocktailIngredientsService.addCocktailIngredients(id, request, authentication);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PostMapping("/{id}/tags")
-    public ResponseEntity<Void> addTags(
-            @PathVariable Long id,
-            @RequestBody AddCocktailTagsRequest request,
-            Authentication authentication
-    ) {
-        cocktailTagsService.addTagsToCocktail(id, request, authentication);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @DeleteMapping("/{id}/tags")
-    public ResponseEntity<Void> deleteTags(
-            @PathVariable Long id,
-            @RequestBody RemoveCocktailTagsRequest request,
-            Authentication authentication
-    ) {
-        cocktailTagsService.removeCocktailTags(id, request, authentication);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}/ingredients")
-    public ResponseEntity<List<CocktailIngredient>> getIngredients(
-            @PathVariable Long id
-    ) {
-        return ResponseEntity.ok(cocktailIngredientsService.getCocktailIngredients(id));
-    }
-
-    @PutMapping("/{id}/ingredients")
-    public ResponseEntity<Void> updateIngredients(
-            @PathVariable Long id,
-            @RequestBody UpdateIngredientAmountRequest request,
-            Authentication authentication
-    ) {
-        cocktailIngredientsService.updateIngredientAmounts(id, request.ingredients(), authentication);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{id}/ingredients")
-    public ResponseEntity<Void> deleteIngredients(
-            @PathVariable Long id,
-            @RequestBody RemoveCocktailIngredientsRequest request,
-            Authentication authentication
-    ) {
-        cocktailIngredientsService.removeCocktailIngredients(id, request, authentication);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}/tags")
-    public ResponseEntity<List<CocktailTag>> getTags(
-            @PathVariable Long id
-    ) {
-        return ResponseEntity.ok(cocktailTagsService.getCocktailTags(id));
-    }
-
-    @GetMapping("/{id}/comments")
-    public ResponseEntity<List<GetCommentResponse>> getComments(
-            @PathVariable Long id
-    ) {
-        return ResponseEntity.ok(commentService.getCommentByCocktail(id));
-    }
-
-    @GetMapping("/{id}/steps")
-    public ResponseEntity<List<CocktailStep>> getSteps(
-            @PathVariable Long id
-    ) {
-        return ResponseEntity.ok(stepService.getStepsByCocktailID(id));
     }
 }

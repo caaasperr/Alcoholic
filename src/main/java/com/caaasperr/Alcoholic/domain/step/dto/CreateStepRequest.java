@@ -3,6 +3,7 @@ package com.caaasperr.Alcoholic.domain.step.dto;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
 import com.caaasperr.Alcoholic.domain.step.model.Step;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;

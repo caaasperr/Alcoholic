@@ -32,6 +32,10 @@ public class Step {
         this.content = content;
     }
 
+    public void updateOrder(Integer order) {
+        this.order = order;
+    }
+
     public void updateImage(String image) {
         this.image = image;
     }

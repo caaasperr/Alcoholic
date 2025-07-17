@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface StepRepository extends JpaRepository<Step, Long> {
-    List<Step> findAllByCocktail_IdOrderByOrderAsc(Long cocktailId);
+    List<Step> findByCocktail_id(Long cocktailId);
 }

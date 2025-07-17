@@ -36,7 +36,6 @@ public class Cocktail {
     private String description;
 
     @Size(max = 255)
-    @NotNull
     private String cover_image;
 
     @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY)

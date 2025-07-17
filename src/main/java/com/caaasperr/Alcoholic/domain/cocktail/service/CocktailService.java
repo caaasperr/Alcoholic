@@ -5,6 +5,7 @@ import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic._common.image.ImageHandler;
+import com.caaasperr.Alcoholic._common.session.model.CustomUserDetails;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.CreateCocktailRequest;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailResponse;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.GetCocktailsResponse;
@@ -37,11 +38,11 @@ public class CocktailService {
         this.imageHandler = imageHandler;
     }
 
-    public void createCocktail(CreateCocktailRequest request) throws IOException {
+    public void createCocktail(CreateCocktailRequest request, Authentication authentication) throws IOException {
         String imagePath = request.cover_image() != null ? imageHandler.saveImage(request.cover_image()) : null;
         cocktailRepository.save(
                 request.toCocktail(
-                        userRepository.findById(request.user_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER)),
+                        userRepository.findById(((CustomUserDetails) authentication.getPrincipal()).getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER)),
                         imagePath
                 )
         );

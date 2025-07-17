@@ -3,6 +3,7 @@ package com.caaasperr.Alcoholic.domain.ingredient.controller;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
+import com.caaasperr.Alcoholic.domain.ingredient.dto.UpdateIngredientRequest;
 import com.caaasperr.Alcoholic.domain.ingredient.model.Ingredient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -41,10 +42,23 @@ public interface IngredientApi {
                     @ApiResponse(responseCode = "404")
             }
     )
+    @Operation(summary = "특정 재료 수정")
+    ResponseEntity<Void> updateIngredient(
+            @RequestParam(defaultValue = "1") Long id,
+            @RequestBody UpdateIngredientRequest request
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
     @Operation(summary = "특정 재료 조회")
     ResponseEntity<GetIngredientResponse> getIngredient(
             @RequestParam(defaultValue = "1") Long id
     );
+
 
     @ApiResponses(
             value = {

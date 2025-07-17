@@ -3,6 +3,7 @@ package com.caaasperr.Alcoholic.domain.cocktail.controller;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
 import com.caaasperr.Alcoholic.domain.comment.dto.GetCommentResponse;
 import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
+import com.caaasperr.Alcoholic.domain.step.dto.ReorderStepRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,7 +23,8 @@ public interface CocktailApi {
     @ApiResponse(responseCode = "201")
     @Operation(summary = "칵테일 생성")
     ResponseEntity<Void> createCocktail(
-            @ModelAttribute CreateCocktailRequest request
+            @ModelAttribute CreateCocktailRequest request,
+            Authentication authentication
     ) throws IOException;
 
     @ApiResponses(
@@ -90,100 +92,5 @@ public interface CocktailApi {
     ResponseEntity<Void> deleteCocktail(
             @PathVariable Long id,
             Authentication authentication
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "403"),
-                    @ApiResponse(responseCode = "404")
-            }
-    )
-    @ApiResponse(responseCode = "201")
-    @Operation(summary = "칵테일 레시피 재료 추가")
-    ResponseEntity<Void> addIngredients(
-            @PathVariable Long id,
-            @RequestBody AddCocktailIngredientsRequest request,
-            Authentication authentication
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "201"),
-                    @ApiResponse(responseCode = "403"),
-                    @ApiResponse(responseCode = "404")
-            }
-    )
-    @Operation(summary = "칵테일 태그 추가")
-    ResponseEntity<Void> addTags(
-            @PathVariable Long id,
-            @RequestBody AddCocktailTagsRequest request,
-            Authentication authentication
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "204"),
-                    @ApiResponse(responseCode = "403"),
-                    @ApiResponse(responseCode = "404")
-            }
-    )
-    @Operation(summary = "칵테일 태그 삭제")
-    ResponseEntity<Void> deleteTags(
-            @PathVariable Long id,
-            @RequestBody RemoveCocktailTagsRequest request,
-            Authentication authentication
-    );
-
-    @ApiResponse(responseCode = "200")
-    @Operation(summary = "칵테일 댓글 조회")
-    ResponseEntity<List<GetCommentResponse>> getComments(
-            @PathVariable Long id
-    );
-
-    @ApiResponse(responseCode = "200")
-    @Operation(summary = "칵테일 재료 조회")
-    ResponseEntity<List<CocktailIngredient>> getIngredients(
-            @PathVariable Long id
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "403"),
-                    @ApiResponse(responseCode = "404")
-            }
-    )
-    @Operation(summary = "칵테일 재료 수정")
-    ResponseEntity<Void> updateIngredients(
-            @PathVariable Long id,
-            @RequestBody UpdateIngredientAmountRequest request,
-            Authentication authentication
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "204"),
-                    @ApiResponse(responseCode = "403"),
-                    @ApiResponse(responseCode = "404")
-            }
-    )
-    @Operation(summary = "칵테일 재료 삭제")
-    ResponseEntity<Void> deleteIngredients(
-            @PathVariable Long id,
-            @RequestBody RemoveCocktailIngredientsRequest request,
-            Authentication authentication
-    );
-
-    @ApiResponse(responseCode = "200")
-    @Operation(summary = "칵테일 태그 조회")
-    ResponseEntity<List<CocktailTag>> getTags(
-            @PathVariable Long id
-    );
-
-    @ApiResponse(responseCode = "200")
-    @Operation(summary = "칵테일 단계 조회")
-    ResponseEntity<List<CocktailStep>> getSteps(
-            @PathVariable Long id
     );
 }
