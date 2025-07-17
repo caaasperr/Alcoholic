@@ -2,6 +2,7 @@ package com.caaasperr.Alcoholic.domain.step.service;
 
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
+import com.caaasperr.Alcoholic._common.image.ImageHandler;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
 import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
 import com.caaasperr.Alcoholic.domain.step.dto.CreateStepRequest;
@@ -10,21 +11,31 @@ import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.step.repository.StepRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public class StepService {
     private final StepRepository stepRepository;
     private final CocktailRepository cocktailRepository;
+    private final ImageHandler imageHandler;
 
-    public StepService(StepRepository stepRepository, CocktailRepository cocktailRepository) {
+    public StepService(StepRepository stepRepository, CocktailRepository cocktailRepository, ImageHandler imageHandler) {
         this.stepRepository = stepRepository;
         this.cocktailRepository = cocktailRepository;
+        this.imageHandler = imageHandler;
     }
 
-    public void createStep(CreateStepRequest request) {
-        stepRepository.save(request.toStep(cocktailRepository.findById(request.cocktail_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL))));
+    public void createStep(CreateStepRequest request) throws IOException {
+        String imagePath = request.image() != null ? imageHandler.saveImage(request.image()) : null;
+        stepRepository.save(
+                request.toStep(
+                        cocktailRepository.findById(request.cocktail_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL)),
+                        imagePath
+                )
+        );
     }
 
     public List<CocktailStep> getStepsByCocktailID(Long id) {
@@ -32,11 +43,24 @@ public class StepService {
     }
 
     @Transactional
-    public void updateStep(Long id, UpdateStepRequest request) {
+    public void updateStep(Long id, UpdateStepRequest request) throws IOException {
         Step step = stepRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
 
         if (request.content() != null && !step.getContent().equals(request.content())) {
             step.updateContent(request.content());
+        }
+
+        MultipartFile newImageFile = request.image();
+
+        if (newImageFile != null && !newImageFile.isEmpty()) {
+            String newFilename = newImageFile.getOriginalFilename();
+            String expectedPath = "/uploads/" + newFilename;
+            String oldImage = step.getImage();
+
+            if (oldImage == null || !oldImage.equals(expectedPath)) {
+                String imagePath = imageHandler.saveImage(newImageFile);
+                step.updateImage(imagePath);
+            }
         }
     }
 

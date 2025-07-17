@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/steps")
 public class StepController implements StepApi {
@@ -20,7 +22,7 @@ public class StepController implements StepApi {
     @PostMapping
     public ResponseEntity<Void> createStep(
             @Valid @RequestBody CreateStepRequest request
-    ) {
+    ) throws IOException {
         stepService.createStep(request);
 
         return ResponseEntity.ok().build();
@@ -30,7 +32,7 @@ public class StepController implements StepApi {
     public ResponseEntity<Void> updateStep(
             @PathVariable Long id,
             @Valid @RequestBody UpdateStepRequest request
-    ) {
+    ) throws IOException {
         stepService.updateStep(id, request);
 
         return ResponseEntity.ok().build();

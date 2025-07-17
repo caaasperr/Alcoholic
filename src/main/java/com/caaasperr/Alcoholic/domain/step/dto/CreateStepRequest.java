@@ -5,6 +5,7 @@ import com.caaasperr.Alcoholic.domain.step.model.Step;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -18,19 +19,18 @@ public record CreateStepRequest(
         @Size(max = 500)
         String content,
 
-        @Schema(description = "이미지 URL", example = "example.com/example.jpg")
-        @Size(max = 255)
-        String image,
+        @Schema(description = "사진")
+        MultipartFile image,
 
         @Schema(description = "단계 순서", example = "0", requiredMode = REQUIRED)
         @NotNull
         Integer order
 ) {
-    public Step toStep(Cocktail cocktail) {
+    public Step toStep(Cocktail cocktail, String image_path) {
         return Step.builder()
                 .cocktail(cocktail)
                 .content(content)
-                .image(image)
+                .image(image_path)
                 .order(order)
                 .build();
     }

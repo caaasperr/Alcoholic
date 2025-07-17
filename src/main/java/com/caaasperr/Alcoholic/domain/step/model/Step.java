@@ -31,4 +31,8 @@ public class Step {
     public void updateContent(String content) {
         this.content = content;
     }
+
+    public void updateImage(String image) {
+        this.image = image;
+    }
 }

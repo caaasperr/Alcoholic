@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -130,12 +131,17 @@ public class CocktailService {
             cocktail.updateDescription(request.description());
         }
 
-        String newImage = "/uploads/" + request.cover_image().getOriginalFilename();
-        String oldImage = cocktail.getCover_image();
+        MultipartFile newImageFile = request.cover_image();
 
-        if (newImage != null && (oldImage == null || !oldImage.equals(newImage))) {
-            String imagePath = imageHandler.saveImage(request.cover_image());
-            cocktail.updateCover_image(imagePath);
+        if (newImageFile != null && !newImageFile.isEmpty()) {
+            String newFilename = newImageFile.getOriginalFilename();
+            String expectedPath = "/uploads/" + newFilename;
+            String oldImage = cocktail.getCover_image();
+
+            if (oldImage == null || !oldImage.equals(expectedPath)) {
+                String imagePath = imageHandler.saveImage(newImageFile);
+                cocktail.updateCover_image(imagePath);
+            }
         }
 
         if (request.vol() != null && !cocktail.getVol().equals(request.vol())) {
