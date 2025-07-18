@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 public record CreateRatingRequest(
         @NotNull
-        @NotBlank
         @DecimalMax(value = "5.0", message = "score은 최대 5.0까지 허용됩니다.")
         @DecimalMin(value = "0", message = "score은 최소 0까지 허용됩니다.")
         Float score,

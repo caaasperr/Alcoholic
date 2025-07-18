@@ -1,9 +1,11 @@
 package com.caaasperr.Alcoholic.domain.rating.controller;
 
 import com.caaasperr.Alcoholic._common.session.model.CustomUserDetails;
+import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailService;
 import com.caaasperr.Alcoholic.domain.rating.dto.CreateRatingRequest;
 import com.caaasperr.Alcoholic.domain.rating.dto.GetCocktailRating;
 import com.caaasperr.Alcoholic.domain.rating.dto.GetRatingResponse;
+import com.caaasperr.Alcoholic.domain.rating.dto.UpdateRatingRequest;
 import com.caaasperr.Alcoholic.domain.rating.service.RatingService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/cocktails")
 public class RatingController implements RatingApi {
     private final RatingService ratingService;
+    private final CocktailService cocktailService;
 
-    public RatingController(RatingService ratingService) {
+    public RatingController(RatingService ratingService, CocktailService cocktailService) {
         this.ratingService = ratingService;
+        this.cocktailService = cocktailService;
     }
 
     @ApiResponses(
@@ -64,6 +68,17 @@ public class RatingController implements RatingApi {
         return ratingService.getMyRating(cocktailId, userDetails.getId())
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.noContent().build());
+    }
+
+    @PutMapping("/{cocktailId}/rating/me")
+    public ResponseEntity<Void> updateRating(
+            @PathVariable Long cocktailId,
+            @Valid @RequestBody UpdateRatingRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        ratingService.updateMyRating(cocktailId, userDetails.getId(), request);
+
+        return ResponseEntity.ok().build();
     }
 
     @ApiResponses(

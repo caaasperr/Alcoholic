@@ -28,6 +28,7 @@ public enum ErrorCode {
 
     //Error code for Rating
     DUPLICATED_RATING(HttpStatus.CONFLICT, "Duplicated rating"),
+    NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "Could not find rating"),
 
     //Error code for middleware
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "Access denied");

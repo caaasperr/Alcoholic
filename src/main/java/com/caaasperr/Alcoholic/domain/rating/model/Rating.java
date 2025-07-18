@@ -40,6 +40,10 @@ public class Rating {
         this.score = score;
     }
 
+    public void updateDescription(String description) {
+        this.description = description;
+    }
+
     public void updateUpdatedAt(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
