@@ -1,7 +1,6 @@
 package com.caaasperr.Alcoholic.domain.rating.controller;
 
 import com.caaasperr.Alcoholic._common.session.model.CustomUserDetails;
-import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailService;
 import com.caaasperr.Alcoholic.domain.rating.dto.CreateRatingRequest;
 import com.caaasperr.Alcoholic.domain.rating.dto.GetCocktailRating;
 import com.caaasperr.Alcoholic.domain.rating.dto.GetRatingResponse;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/cocktails")
 public class RatingController implements RatingApi {
     private final RatingService ratingService;
-    private final CocktailService cocktailService;
 
-    public RatingController(RatingService ratingService, CocktailService cocktailService) {
+    public RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
-        this.cocktailService = cocktailService;
     }
 
     @ApiResponses(
@@ -70,7 +67,7 @@ public class RatingController implements RatingApi {
                 .orElse(ResponseEntity.noContent().build());
     }
 
-    @PutMapping("/{cocktailId}/rating/me")
+    @PatchMapping("/{cocktailId}/rating/me")
     public ResponseEntity<Void> updateRating(
             @PathVariable Long cocktailId,
             @Valid @RequestBody UpdateRatingRequest request,

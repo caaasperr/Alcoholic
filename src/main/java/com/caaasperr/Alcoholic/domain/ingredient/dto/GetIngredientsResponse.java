@@ -24,6 +24,7 @@ public record GetIngredientsResponse(
     }
 
     private record IngredientRespForGetCocktails(
+            Long ingredient_id,
             String maker,
             String name,
             Float vol,
@@ -31,7 +32,7 @@ public record GetIngredientsResponse(
             String description
     ) {
         public static IngredientRespForGetCocktails of(Ingredient ingredient) {
-            return new IngredientRespForGetCocktails(ingredient.getMaker().getName(), ingredient.getName(), ingredient.getVol(), ingredient.getType(), ingredient.getDescription());
+            return new IngredientRespForGetCocktails(ingredient.getId(), ingredient.getMaker().getName(), ingredient.getName(), ingredient.getVol(), ingredient.getType(), ingredient.getDescription());
         }
     }
 }

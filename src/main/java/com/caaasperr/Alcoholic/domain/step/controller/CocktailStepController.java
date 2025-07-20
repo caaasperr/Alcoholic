@@ -27,13 +27,13 @@ public class CocktailStepController implements CocktailStepApi {
     }
 
     @CheckCocktailOwner
-    @PutMapping("/{id}/steps/reorder")
+    @PatchMapping("/{id}/steps/reorder")
     public ResponseEntity<Void> reorderSteps(
             @PathVariable Long id,
             @RequestBody ReorderStepRequest request,
             Authentication authentication
     ) {
-        stepService.reorderSteps(id, request.stepIds());
+        stepService.reorderSteps(id, request.stepIds(), authentication);
 
         return ResponseEntity.ok().build();
     }

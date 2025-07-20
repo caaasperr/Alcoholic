@@ -1,17 +1,12 @@
 package com.caaasperr.Alcoholic.domain.cocktail.controller;
 
-import com.caaasperr.Alcoholic._common.annotation.CheckCocktailOwner;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
-import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailIngredientsService;
 import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailService;
-import com.caaasperr.Alcoholic.domain.cocktail.service.CocktailTagsService;
-import com.caaasperr.Alcoholic.domain.comment.dto.GetCommentResponse;
-import com.caaasperr.Alcoholic.domain.comment.service.CommentService;
-import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
-import com.caaasperr.Alcoholic.domain.step.dto.ReorderStepRequest;
-import com.caaasperr.Alcoholic.domain.step.service.StepService;
+import com.caaasperr.Alcoholic.domain.rating.service.RatingService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -23,20 +18,14 @@ import java.util.List;
 @RequestMapping("/cocktails")
 public class CocktailController implements CocktailApi{
     private final CocktailService cocktailService;
-    private final CocktailIngredientsService cocktailIngredientsService;
-    private final CocktailTagsService cocktailTagsService;
-    private final CommentService commentService;
-    private final StepService stepService;
+    private final RatingService ratingService;
 
-    public CocktailController(CocktailService cocktailService, StepService stepService, CocktailIngredientsService cocktailIngredientsService, CocktailTagsService cocktailTagsService, CommentService commentService) {
+    public CocktailController(CocktailService cocktailService, RatingService ratingService) {
         this.cocktailService = cocktailService;
-        this.cocktailIngredientsService = cocktailIngredientsService;
-        this.cocktailTagsService = cocktailTagsService;
-        this.commentService = commentService;
-        this.stepService = stepService;
+        this.ratingService = ratingService;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> createCocktail(
             @Valid @ModelAttribute CreateCocktailRequest request,
             Authentication authentication
@@ -51,20 +40,24 @@ public class CocktailController implements CocktailApi{
             @RequestParam(required = false) List<String> tags,
             @RequestParam(required = false) List<String> ingredients,
             @RequestParam(required = false, defaultValue = "any") String match,
+            @RequestParam(required = false) String author,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer size
     ) {
         boolean matchAll = "all".equalsIgnoreCase(match);
-        GetCocktailsResponse response = cocktailService.getCocktails(page, size, matchAll, tags, ingredients);
+        GetCocktailsResponse response = cocktailService.getCocktails(page, size, matchAll, tags, ingredients, author);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GetCocktailResponse> getCocktail(
-            @PathVariable Long id
+            @PathVariable Long id,
+            HttpServletRequest servletRequest
     ) {
-        return ResponseEntity.ok(GetCocktailResponse.of(cocktailService.getCocktail(id)));
+        cocktailService.increaseViewCount(id, servletRequest.getRemoteAddr());
+
+        return ResponseEntity.ok(GetCocktailResponse.of(cocktailService.getCocktail(id), ratingService.getAverageRating(id).average_rating()));
     }
 
     @GetMapping("/search")
@@ -76,7 +69,7 @@ public class CocktailController implements CocktailApi{
         return ResponseEntity.ok(cocktailService.searchByName(query, page, size));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateCocktail(
             @PathVariable Long id,
             @Valid @ModelAttribute UpdateCocktailRequest request,

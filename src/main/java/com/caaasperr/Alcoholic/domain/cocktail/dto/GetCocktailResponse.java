@@ -12,6 +12,7 @@ public record GetCocktailResponse(
         String username,
         String name,
         String description,
+        Float average_rating,
         String cover_image,
         List<CocktailTag> tags,
         List<CocktailIngredient> ingredients,
@@ -20,7 +21,7 @@ public record GetCocktailResponse(
         Long view,
         LocalDateTime created_at
 ) {
-    public static GetCocktailResponse of(Cocktail cocktail) {
+    public static GetCocktailResponse of(Cocktail cocktail, Float averageRating) {
         List<CocktailTag> tags = cocktail.getTags().stream().map(CocktailTag::from).toList();
         List<CocktailIngredient> ingredients = cocktail.getIngredients().stream().map(CocktailIngredient::from).toList();
         List<CocktailStep> steps = cocktail.getSteps().stream().map(CocktailStep::from).toList();
@@ -30,6 +31,7 @@ public record GetCocktailResponse(
                 cocktail.getUser().getUsername(),
                 cocktail.getName(),
                 cocktail.getDescription(),
+                averageRating,
                 cocktail.getCover_image(),
                 tags,
                 ingredients,

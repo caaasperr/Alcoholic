@@ -1,18 +1,15 @@
 package com.caaasperr.Alcoholic.domain.cocktail.controller;
 
 import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
-import com.caaasperr.Alcoholic.domain.comment.dto.GetCommentResponse;
-import com.caaasperr.Alcoholic.domain.step.dto.CocktailStep;
-import com.caaasperr.Alcoholic.domain.step.dto.ReorderStepRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
@@ -38,6 +35,7 @@ public interface CocktailApi {
             @RequestParam(required = false) List<String> tags,
             @RequestParam(required = false) List<String> ingredients,
             @RequestParam(required = false) String match,
+            @RequestParam(required = false) String author,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     );
@@ -50,7 +48,8 @@ public interface CocktailApi {
     )
     @Operation(summary = "칵테일 조회")
     ResponseEntity<GetCocktailResponse> getCocktail(
-            @PathVariable Long id
+            @PathVariable Long id,
+            HttpServletRequest servletRequest
     );
 
     @ApiResponses(

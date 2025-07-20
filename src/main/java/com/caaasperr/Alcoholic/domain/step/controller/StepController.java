@@ -2,10 +2,11 @@ package com.caaasperr.Alcoholic.domain.step.controller;
 
 import com.caaasperr.Alcoholic.domain.step.dto.CreateStepRequest;
 import com.caaasperr.Alcoholic.domain.step.dto.UpdateStepRequest;
-import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.step.service.StepService;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,30 +20,33 @@ public class StepController implements StepApi {
         this.stepService = stepService;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> createStep(
-            @Valid @ModelAttribute CreateStepRequest request
+            @Valid @ModelAttribute CreateStepRequest request,
+            Authentication authentication
     ) throws IOException {
-        stepService.createStep(request);
+        stepService.createStep(request, authentication);
 
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateStep(
             @PathVariable Long id,
-            @Valid @ModelAttribute UpdateStepRequest request
+            @Valid @ModelAttribute UpdateStepRequest request,
+            Authentication authentication
     ) throws IOException {
-        stepService.updateStep(id, request);
+        stepService.updateStep(id, request, authentication);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStep(
-            @PathVariable Long id
+            @PathVariable Long id,
+            Authentication authentication
     ) {
-        stepService.deleteStep(id);
+        stepService.deleteStep(id, authentication);
 
         return ResponseEntity.noContent().build();
     }

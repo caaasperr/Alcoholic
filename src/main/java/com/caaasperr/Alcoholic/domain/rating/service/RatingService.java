@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RatingService {
@@ -53,6 +55,10 @@ public class RatingService {
                         r.getScore(),
                         r.getDescription())
                 );
+    }
+
+    public List<GetRatingResponse> getMyRatings(Long userId) {
+        return ratingRepository.findAllByUser_Id(userId).stream().map(GetRatingResponse::fromRating).collect(Collectors.toList());
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,19 +18,22 @@ public interface StepApi {
     @ApiResponse(responseCode = "201")
     @Operation(summary = "레시피 단계 생성")
     ResponseEntity<Void> createStep(
-            @RequestBody CreateStepRequest request
+            @RequestBody CreateStepRequest request,
+            Authentication authentication
     ) throws IOException;
 
     @ApiResponse(responseCode = "204")
     @Operation(summary = "레시피 단계 삭제")
     ResponseEntity<Void> deleteStep(
-            @PathVariable Long id
+            @PathVariable Long id,
+            Authentication authentication
     );
 
     @ApiResponse(responseCode = "200")
     @Operation(summary = "레시피 단계 수정")
     ResponseEntity<Void> updateStep(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateStepRequest request
+            @Valid @RequestBody UpdateStepRequest request,
+            Authentication authentication
     ) throws IOException;
 }

@@ -2,6 +2,8 @@ package com.caaasperr.Alcoholic._common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -12,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -25,12 +28,13 @@ public class SecurityConfig {
                                 "/api-docs",
                                 "/api-docs/**",
                                 "/v3/api-docs/**",
-                                "/swagger.html"
-                                ).permitAll()
-                        .requestMatchers(
-                                "/auth/login",
+                                "/swagger.html",
+                                "/auth/session/validate",
+                                "/error"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
                                 "/users/register",
-                                "/auth/session/validate"
+                                "/auth/login"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

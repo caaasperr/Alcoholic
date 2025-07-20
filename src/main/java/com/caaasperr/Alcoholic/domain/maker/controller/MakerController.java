@@ -8,6 +8,7 @@ import com.caaasperr.Alcoholic.domain.maker.model.Maker;
 import com.caaasperr.Alcoholic.domain.maker.service.MakerService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,7 @@ public class MakerController implements MakerApi {
         this.makerService = makerService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createMaker(
             @Valid @RequestBody CreateMakerRequest request
@@ -43,7 +45,8 @@ public class MakerController implements MakerApi {
         return ResponseEntity.ok(makerService.getMakers(page, size));
     }
 
-    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updateMaker(
             @PathVariable Long id,
             @Valid @RequestBody UpdateMakerRequest request
@@ -53,6 +56,7 @@ public class MakerController implements MakerApi {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMaker(
 

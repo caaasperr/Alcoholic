@@ -3,6 +3,7 @@ package com.caaasperr.Alcoholic.domain.ingredient.service;
 import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
+import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailIngredientsRepository;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.CreateIngredientRequest;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientResponse;
 import com.caaasperr.Alcoholic.domain.ingredient.dto.GetIngredientsResponse;
@@ -19,12 +20,15 @@ import org.springframework.stereotype.Service;
 public class IngredientService {
     private final IngredientRepository ingredientRepository;
     private final MakerRepository makerRepository;
+    private final CocktailIngredientsRepository cocktailIngredientsRepository;
 
-    public IngredientService(IngredientRepository ingredientRepository, MakerRepository makerRepository) {
+    public IngredientService(IngredientRepository ingredientRepository, MakerRepository makerRepository, CocktailIngredientsRepository cocktailIngredientsRepository) {
         this.ingredientRepository = ingredientRepository;
         this.makerRepository = makerRepository;
+        this.cocktailIngredientsRepository = cocktailIngredientsRepository;
     }
 
+    @Transactional
     public void createIngredient(CreateIngredientRequest request) {
         Ingredient ingredient = request.toIngredient(makerRepository.findById(request.maker_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MAKER)));
         ingredientRepository.save(ingredient);
@@ -67,7 +71,9 @@ public class IngredientService {
         }
     }
 
+    @Transactional
     public void deleteIngredient(Long id) {
+        cocktailIngredientsRepository.deleteByIngredient_id(id);
         ingredientRepository.deleteById(id);
     }
 }

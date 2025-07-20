@@ -37,4 +37,8 @@ public class User {
     private String role = "USER";
 
     private LocalDateTime createdAt;
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }

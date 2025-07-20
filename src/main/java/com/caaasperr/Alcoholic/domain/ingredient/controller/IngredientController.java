@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class IngredientController implements IngredientApi {
         this.ingredientService = ingredientService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createIngredient(
             @Valid @RequestBody CreateIngredientRequest request
@@ -45,7 +47,8 @@ public class IngredientController implements IngredientApi {
         return ResponseEntity.ok(ingredientService.getIngredient(id));
     }
 
-    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updateIngredient(
             @PathVariable Long id,
             @Valid @RequestBody UpdateIngredientRequest request
@@ -55,6 +58,7 @@ public class IngredientController implements IngredientApi {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteIngredient(
             @PathVariable Long id

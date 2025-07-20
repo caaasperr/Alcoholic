@@ -29,6 +29,7 @@ public class CocktailIngredientsService {
         this.ingredientRepository = ingredientRepository;
     }
 
+    @Transactional
     @CheckCocktailOwner
     public void addCocktailIngredients(Long cocktail_id, AddCocktailIngredientsRequest request, Authentication authentication) {
         Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
@@ -63,6 +64,7 @@ public class CocktailIngredientsService {
         }
     }
 
+    @Transactional
     @CheckCocktailOwner
     public void removeCocktailIngredients(Long cocktail_id, RemoveCocktailIngredientsRequest request, Authentication authentication) {
         Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));

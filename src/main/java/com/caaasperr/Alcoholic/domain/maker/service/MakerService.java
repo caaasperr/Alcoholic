@@ -3,6 +3,7 @@ package com.caaasperr.Alcoholic.domain.maker.service;
 import com.caaasperr.Alcoholic._common.dto.Criteria;
 import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
+import com.caaasperr.Alcoholic.domain.ingredient.repository.IngredientRepository;
 import com.caaasperr.Alcoholic.domain.maker.dto.CreateMakerRequest;
 import com.caaasperr.Alcoholic.domain.maker.dto.GetMakerResponse;
 import com.caaasperr.Alcoholic.domain.maker.dto.GetMakersResponse;
@@ -17,11 +18,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class MakerService {
     private final MakerRepository makerRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public MakerService(MakerRepository makerRepository) {
+    public MakerService(MakerRepository makerRepository, IngredientRepository ingredientRepository) {
         this.makerRepository = makerRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
+    @Transactional
     public void createMaker(CreateMakerRequest request) {
         makerRepository.save(request.toMaker());
     }
@@ -59,7 +63,9 @@ public class MakerService {
         }
     }
 
+    @Transactional
     public void deleteMaker(Long id) {
+        ingredientRepository.deleteByMaker_Id(id);
         makerRepository.deleteById(id);
     }
 }

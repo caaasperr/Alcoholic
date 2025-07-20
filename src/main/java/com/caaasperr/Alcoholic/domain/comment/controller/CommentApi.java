@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -40,7 +41,8 @@ public interface CommentApi {
     @Operation(summary = "댓글 수정")
     ResponseEntity<Void> updateComment(
             @PathVariable Long id,
-            @RequestBody UpdateCommentRequest request
+            @RequestBody UpdateCommentRequest request,
+            Authentication authentication
     );
 
     @ApiResponses (
@@ -51,6 +53,7 @@ public interface CommentApi {
     )
     @Operation(summary = "댓글 삭제")
     ResponseEntity<Void> deleteComment(
-            @PathVariable Long id
+            @PathVariable Long id,
+            Authentication authentication
     );
 }

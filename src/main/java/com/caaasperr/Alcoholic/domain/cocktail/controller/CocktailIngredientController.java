@@ -39,7 +39,7 @@ public class CocktailIngredientController implements CocktailIngredientApi {
         return ResponseEntity.ok(cocktailIngredientsService.getCocktailIngredients(id));
     }
 
-    @PutMapping("/{id}/ingredients")
+    @PatchMapping("/{id}/ingredients")
     public ResponseEntity<Void> updateIngredients(
             @PathVariable Long id,
             @RequestBody UpdateIngredientAmountRequest request,

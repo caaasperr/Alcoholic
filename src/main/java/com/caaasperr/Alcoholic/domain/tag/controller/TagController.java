@@ -1,11 +1,13 @@
 package com.caaasperr.Alcoholic.domain.tag.controller;
 
 import com.caaasperr.Alcoholic.domain.tag.dto.CreateTagRequest;
+import com.caaasperr.Alcoholic.domain.tag.dto.GetAllTagResponse;
 import com.caaasperr.Alcoholic.domain.tag.dto.GetTagResponse;
 import com.caaasperr.Alcoholic.domain.tag.dto.UpdateTagRequest;
 import com.caaasperr.Alcoholic.domain.tag.service.TagService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +19,7 @@ public class TagController implements TagApi {
         this.tagService = tagService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createTag(
             @Valid @RequestBody CreateTagRequest request
@@ -33,7 +36,13 @@ public class TagController implements TagApi {
         return ResponseEntity.ok(tagService.getTag(id));
     }
 
-    @PutMapping("/{id}")
+    @GetMapping
+    public ResponseEntity<GetAllTagResponse> getAllTags() {
+        return ResponseEntity.ok(tagService.getAllTags());
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updateTag(
             @PathVariable Long id,
             @Valid @RequestBody UpdateTagRequest request
@@ -43,6 +52,7 @@ public class TagController implements TagApi {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTag(
             @PathVariable Long id

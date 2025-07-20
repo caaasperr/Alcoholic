@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public record GetCocktailsResponse(
         List<CocktailRespForGetCocktails> cocktails,
@@ -16,9 +17,15 @@ public record GetCocktailsResponse(
         long total_count
 ) {
 
-    public static GetCocktailsResponse of(Page<Cocktail> cocktails, Criteria criteria) {
+    public static GetCocktailsResponse of(Page<Cocktail> cocktails, Map<Long, Float> averageRatings, Criteria criteria) {
+        List<CocktailRespForGetCocktails> cocktailResponses = cocktails.stream()
+                .map(cocktail -> {
+                    Float avgRating = averageRatings.getOrDefault(cocktail.getId(), 0.0f);
+                    return CocktailRespForGetCocktails.of(cocktail, avgRating);
+                })
+                .toList();
         return new GetCocktailsResponse(
-                cocktails.stream().map(CocktailRespForGetCocktails::of).toList(),
+                cocktailResponses,
                 criteria.getPage(),
                 cocktails.getTotalPages(),
                 cocktails.getContent().size(),
@@ -31,6 +38,7 @@ public record GetCocktailsResponse(
             String username,
             String name,
             String description,
+            Float average_rating,
             String cover_image,
             List<CocktailTag> tags,
             List<CocktailIngredient> ingredients,
@@ -38,7 +46,7 @@ public record GetCocktailsResponse(
             Long view,
             LocalDateTime created_at
     ) {
-        public static CocktailRespForGetCocktails of(Cocktail cocktail) {
+        public static CocktailRespForGetCocktails of(Cocktail cocktail, Float average_rating) {
             List<CocktailTag> tags = cocktail.getTags().stream().map(CocktailTag::from).toList();
             List<CocktailIngredient> ingredients = cocktail.getIngredients().stream().map(CocktailIngredient::from).toList();
 
@@ -47,6 +55,7 @@ public record GetCocktailsResponse(
                     cocktail.getUser().getUsername(),
                     cocktail.getName(),
                     cocktail.getDescription(),
+                    average_rating,
                     cocktail.getCover_image(),
                     tags,
                     ingredients,

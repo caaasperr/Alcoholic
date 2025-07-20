@@ -28,6 +28,7 @@ public class CommentService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void createComment(CreateCommentRequest request) {
         commentRepository.save(request.toComment(
                 cocktailRepository.findById(request.cocktail_id()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL)),
@@ -50,6 +51,7 @@ public class CommentService {
         comment.updateUpdatedAt(LocalDateTime.now());
     }
 
+    @Transactional
     public void deleteComment(Long id) {
         commentRepository.deleteById(id);
     }

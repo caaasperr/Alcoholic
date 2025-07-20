@@ -5,12 +5,12 @@ import com.caaasperr.Alcoholic._common.exception.CustomException;
 import com.caaasperr.Alcoholic._common.exception.ErrorCode;
 import com.caaasperr.Alcoholic.domain.cocktail.dto.*;
 import com.caaasperr.Alcoholic.domain.cocktail.model.Cocktail;
-import com.caaasperr.Alcoholic.domain.cocktail.model.CocktailIngredients;
 import com.caaasperr.Alcoholic.domain.cocktail.model.CocktailTags;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailRepository;
 import com.caaasperr.Alcoholic.domain.cocktail.repository.CocktailTagsRepository;
 import com.caaasperr.Alcoholic.domain.tag.model.Tag;
 import com.caaasperr.Alcoholic.domain.tag.repository.TagRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +29,7 @@ public class CocktailTagsService {
         this.tagRepository = tagRepository;
     }
 
+    @Transactional
     @CheckCocktailOwner
     public void addTagsToCocktail(Long cocktail_id, AddCocktailTagsRequest request, Authentication authentication) {
         Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));
@@ -40,6 +41,7 @@ public class CocktailTagsService {
         }
     }
 
+    @Transactional
     @CheckCocktailOwner
     public void removeCocktailTags(Long cocktail_id, RemoveCocktailTagsRequest request, Authentication authentication) {
         Cocktail cocktail = cocktailRepository.findById(cocktail_id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COCKTAIL));

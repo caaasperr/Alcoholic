@@ -1,5 +1,6 @@
 package com.caaasperr.Alcoholic.domain.cocktail.model;
 
+import com.caaasperr.Alcoholic.domain.comment.model.Comment;
 import com.caaasperr.Alcoholic.domain.step.model.Step;
 import com.caaasperr.Alcoholic.domain.user.model.User;
 import jakarta.persistence.*;
@@ -38,13 +39,13 @@ public class Cocktail {
     @Size(max = 255)
     private String cover_image;
 
-    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<CocktailIngredients> ingredients;
 
-    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<CocktailTags> tags;
 
-    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Step> steps;
 
     private Float vol;
